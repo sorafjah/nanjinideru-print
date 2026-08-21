@@ -118,7 +118,7 @@
     width:210mm;
     min-height:297mm;
     margin:0 auto;
-    padding:5mm 10mm 15mm 20mm;
+    padding:15mm 10mm 15mm 20mm;
     box-shadow:0 2px 10px rgba(0,0,0,.15);
   }
   .sheet .headline{
@@ -207,7 +207,7 @@
         <span class="label">問題の数</span>
         <div class="stepper-box">
           <button class="step-btn" id="cnt-minus">▽</button>
-          <input class="num-in" id="cnt-in" type="number" inputmode="numeric" value="5" min="1" max="30">
+          <input class="num-in" id="cnt-in" type="number" inputmode="numeric" value="6" min="1" max="30">
           <button class="step-btn" id="cnt-plus">△</button>
           <span class="unit">問</span>
         </div>
@@ -440,7 +440,7 @@ function buildChoices(ansMin, raw){
    じょうたい
 ============================================================ */
 const state = {
-  settings:{ levels:[1,2], diff:"normal", direction:"random", mode:"fill", count:5 },
+  settings:{ levels:[1,2], diff:"normal", direction:"random", mode:"fill", count:6 },
   problems:[],   // { level, q, ansH, ansM, choices:[{h,m,correct}]|null, _wrongCount }
   tab:"problem", // problem | answer
 };
@@ -478,9 +478,9 @@ function bindSetup(){
     });
   });
   const cnt=document.getElementById("cnt-in");
-  const clampCnt=()=>{ let v=parseInt(cnt.value)||5; v=Math.max(1,Math.min(30,v)); cnt.value=v; state.settings.count=v; };
-  document.getElementById("cnt-minus").addEventListener("click",()=>{ cnt.value=(parseInt(cnt.value)||5)-1; clampCnt(); });
-  document.getElementById("cnt-plus").addEventListener("click",()=>{ cnt.value=(parseInt(cnt.value)||5)+1; clampCnt(); });
+  const clampCnt=()=>{ let v=parseInt(cnt.value)||6; v=Math.max(1,Math.min(30,v)); cnt.value=v; state.settings.count=v; };
+  document.getElementById("cnt-minus").addEventListener("click",()=>{ cnt.value=(parseInt(cnt.value)||6)-1; clampCnt(); });
+  document.getElementById("cnt-plus").addEventListener("click",()=>{ cnt.value=(parseInt(cnt.value)||6)+1; clampCnt(); });
   cnt.addEventListener("change",clampCnt);
 
   document.getElementById("btn-generate").addEventListener("click", generateAndGo);
@@ -693,7 +693,7 @@ function buildPrintHtml(mode){
     width:210mm;
     min-height:297mm;
     margin:0 auto;
-    padding:5mm 10mm 15mm 20mm;
+    padding:15mm 10mm 15mm 20mm;
     box-shadow:0 2px 10px rgba(0,0,0,.15);
   }
   .headline{
