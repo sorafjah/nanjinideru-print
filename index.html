@@ -91,8 +91,37 @@
   .choice-edit .c-item{ display:flex; align-items:center; gap:4px; background:var(--bg); border-radius:10px; padding:4px 8px; border:2px solid var(--line); }
   .choice-edit .c-item.correct{ border-color:var(--correct); background:#e9f7f0; }
   .del-btn{ background:none; color:var(--ink-soft); font-size:13px; text-decoration:underline; box-shadow:none; padding:4px; min-height:auto; }
+  .reveal-btn{ min-height:44px; padding:0 16px; font-size:15px; background:var(--soft); color:var(--primary-dark); border:2px solid var(--line); margin-top:10px; }
+  .reveal-btn:active{ background:#dcebf7; }
 
   .out-actions{ display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin:16px 0 8px; }
+
+  /* アニメモーダル */
+  .anim-modal-bg{ display:none; position:fixed; inset:0; background:rgba(43,58,74,.55); z-index:60; align-items:center; justify-content:center; padding:12px; }
+  .anim-modal-bg.show{ display:flex; }
+  .anim-modal{ background:#fff; border-radius:20px; padding:18px 18px 20px; max-width:600px; width:100%; max-height:92vh; overflow-y:auto; box-shadow:0 12px 34px rgba(0,0,0,.28); }
+  .anim-modal-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+  .anim-modal-head h2{ font-size:19px; margin:0; color:var(--primary-dark); }
+  .anim-close{ min-height:40px; min-width:40px; padding:0; font-size:18px; background:#eef4fa; color:var(--ink-soft); border-radius:10px; }
+
+  .anim-canvas-wrap canvas{ width:100%; max-width:560px; height:auto; background:#eef5fb; border-radius:14px; display:block; margin:0 auto; }
+  .anim-controls{ display:flex; align-items:center; gap:12px; max-width:560px; margin:8px auto 2px; }
+  .anim-playbtn{ width:40px; height:40px; border-radius:50%; background:#fff; color:var(--primary); font-size:13px; border:2px solid var(--line); flex:0 0 auto; }
+  .anim-playbtn:active{ background:var(--soft); }
+  .anim-range{ flex:1; height:40px; -webkit-appearance:none; appearance:none; background:transparent; touch-action:pan-x; }
+  .anim-range::-webkit-slider-runnable-track{ height:6px; border-radius:6px; background:var(--line); }
+  .anim-range::-webkit-slider-thumb{ -webkit-appearance:none; width:26px; height:26px; margin-top:-10px; border-radius:50%; background:var(--primary); border:3px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,.25); }
+  .anim-range::-moz-range-track{ height:6px; border-radius:6px; background:var(--line); }
+  .anim-range::-moz-range-thumb{ width:26px; height:26px; border-radius:50%; background:var(--primary); border:3px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,.25); }
+
+  .anim-fields{ display:flex; flex-wrap:wrap; gap:10px 18px; margin-top:14px; padding-top:12px; border-top:2px solid var(--line); }
+  .anim-field{ display:flex; align-items:center; gap:6px; }
+  .anim-field .f-lbl{ font-size:14px; color:var(--ink-soft); width:5.5em; }
+  .anim-mini-step{ width:36px; height:36px; font-size:18px; border-radius:8px; background:#fff; color:var(--primary); border:2px solid var(--line); }
+  .anim-mini-step:active{ background:var(--soft); }
+  .anim-mini-in{ width:52px; height:36px; font-size:15px; text-align:center; border:2px solid var(--line); border-radius:8px; font-family:inherit; font-weight:700; }
+  .anim-unit{ font-size:13px; color:var(--ink-soft); }
+  .anim-reset-btn{ min-height:38px; padding:0 14px; font-size:14px; background:#fff; color:var(--primary); border:2px solid var(--line); margin-top:10px; }
 
   /* モーダル */
   .modal-bg{ display:none; position:fixed; inset:0; background:rgba(43,58,74,.5); z-index:50; align-items:center; justify-content:center; padding:16px; }
@@ -261,6 +290,27 @@
 
 </div>
 
+<!-- アニメで見る モーダル -->
+<div class="anim-modal-bg" id="anim-modal">
+  <div class="anim-modal">
+    <div class="anim-modal-head">
+      <h2>アニメで見る</h2>
+      <button class="anim-close" id="anim-close">✕</button>
+    </div>
+    <div class="anim-canvas-wrap">
+      <canvas id="anim-canvas" width="560" height="170"></canvas>
+      <div class="anim-controls">
+        <button class="anim-playbtn" id="anim-play">▶</button>
+        <input type="range" id="anim-scrub" class="anim-range" min="0" max="1000" value="0">
+      </div>
+    </div>
+    <div class="anim-fields" id="anim-fields"></div>
+    <div style="text-align:center;">
+      <button class="anim-reset-btn" id="anim-reset">この問題の数字にもどす</button>
+    </div>
+  </div>
+</div>
+
 <!-- はじめてガイド -->
 <div class="modal-bg" id="help-modal">
   <div class="modal">
@@ -360,12 +410,12 @@ function makeRawProblem(level, settings){
     let goal;
     do{ goal = time5(9,17); }while( goal - ride - walk < 6*60 );
     const ans = goal - ride - walk;
-    return { level, q:`B<ruby>駅<rt>えき</rt></ruby>に ${jHL(goal)}に<ruby>着<rt>つ</rt></ruby>きたいです。<br><ruby>家<rt>いえ</rt></ruby>からA<ruby>駅<rt>えき</rt></ruby>まで<ruby>歩<rt>ある</rt></ruby>いて ${walk}分、A<ruby>駅<rt>えき</rt></ruby>からB<ruby>駅<rt>えき</rt></ruby>まで<ruby>電車<rt>でんしゃ</rt></ruby>で ${ride}分かかります。<br>何時何分に<ruby>家<rt>いえ</rt></ruby>を<ruby>出<rt>で</rt></ruby>たらいいですか。`, ans, op:"sub", base:goal, delta:totalDelta };
+    return { level, q:`B<ruby>駅<rt>えき</rt></ruby>に ${jHL(goal)}に<ruby>着<rt>つ</rt></ruby>きたいです。<br><ruby>家<rt>いえ</rt></ruby>からA<ruby>駅<rt>えき</rt></ruby>まで<ruby>歩<rt>ある</rt></ruby>いて ${walk}分、A<ruby>駅<rt>えき</rt></ruby>からB<ruby>駅<rt>えき</rt></ruby>まで<ruby>電車<rt>でんしゃ</rt></ruby>で ${ride}分かかります。<br>何時何分に<ruby>家<rt>いえ</rt></ruby>を<ruby>出<rt>で</rt></ruby>たらいいですか。`, ans, op:"sub", base:goal, delta:totalDelta, walk, ride };
   }else{
     let now;
     do{ now = time5(7,17); }while( now + walk + ride >= 24*60 );
     const ans = now + walk + ride;
-    return { level, q:`<ruby>今<rt>いま</rt></ruby> ${jHL(now)}です。<ruby>家<rt>いえ</rt></ruby>からA<ruby>駅<rt>えき</rt></ruby>まで<ruby>歩<rt>ある</rt></ruby>いて ${walk}分、A<ruby>駅<rt>えき</rt></ruby>からB<ruby>駅<rt>えき</rt></ruby>まで<ruby>電車<rt>でんしゃ</rt></ruby>で ${ride}分かかります。<br>何時何分にB<ruby>駅<rt>えき</rt></ruby>に<ruby>着<rt>つ</rt></ruby>きますか。`, ans, op:"add", base:now, delta:totalDelta };
+    return { level, q:`<ruby>今<rt>いま</rt></ruby> ${jHL(now)}です。<ruby>家<rt>いえ</rt></ruby>からA<ruby>駅<rt>えき</rt></ruby>まで<ruby>歩<rt>ある</rt></ruby>いて ${walk}分、A<ruby>駅<rt>えき</rt></ruby>からB<ruby>駅<rt>えき</rt></ruby>まで<ruby>電車<rt>でんしゃ</rt></ruby>で ${ride}分かかります。<br>何時何分にB<ruby>駅<rt>えき</rt></ruby>に<ruby>着<rt>つ</rt></ruby>きますか。`, ans, op:"add", base:now, delta:totalDelta, walk, ride };
   }
 }
 
@@ -505,7 +555,7 @@ function generateProblems(){
   for(let i=0;i<n;i++){
     const raw = makeRawProblem(choice(levels), state.settings);
     const t=fmt(raw.ans);
-    const prob = { level:raw.level, q:raw.q, ansH:t.h, ansM:t.mm, choices:null };
+    const prob = { level:raw.level, q:raw.q, ansH:t.h, ansM:t.mm, choices:null, op:raw.op, base:raw.base, delta:raw.delta, walk:raw.walk, ride:raw.ride };
     if(state.settings.mode==="choice"){
       prob.choices = buildChoices(raw.ans, raw);
     }
@@ -564,6 +614,7 @@ function renderProblemList(){
       html+=`</div>`;
     }
     html+=`
+      <button class="reveal-btn" data-i="${i}" data-act="anim">アニメで見る</button>
       <div style="text-align:right;"><button class="del-btn" data-i="${i}" data-act="del">この問題を削除</button></div>
     `;
     card.innerHTML=html;
@@ -619,6 +670,12 @@ function bindProblemEvents(){
       if(state.problems.length<=1){ alert("最後の1問は削除できません"); return; }
       state.problems.splice(i,1);
       renderProblemList();
+    });
+  });
+  document.querySelectorAll("[data-act='anim']").forEach(el=>{
+    el.addEventListener("click",()=>{
+      const i=parseInt(el.dataset.i);
+      openAnimModal(state.problems[i]);
     });
   });
 }
@@ -818,8 +875,387 @@ function initHelp(){
 }
 
 /* ============================================================
+   アニメーション(2D Canvas)
+   ・「なんじにでるかな？」本編の描画ロジックを移植
+   ・プリントの問題データ(op/base/delta/walk/ride)から初期値を組み立てる
+   ・モーダル内で歩く時間・電車時間・今の時刻を△▽＋直接入力で
+     いじって、その場でアニメを作り直せる
+============================================================ */
+const animEdit = {
+  kind:null,      // "walk" | "ride" | "walkride"
+  reverse:false,  // true = 到着時刻がわかっていて出発時刻を求める(巻き戻し)
+  now:0,          // 分かっている時刻(0-1439)
+  walk:10,
+  ride:20,
+};
+const animRun = { playing:false, total:0, durSec:6, progress:0, lastTs:null };
+let animId=null;
+let pendingPlayTimeout=null;
+let animCurrentProblem=null;
+
+function stopAnimAll(){
+  animRun.playing=false; animRun.lastTs=null;
+  if(animId){ cancelAnimationFrame(animId); animId=null; }
+  if(pendingPlayTimeout){ clearTimeout(pendingPlayTimeout); pendingPlayTimeout=null; }
+}
+
+/* 問題データから、アニメ編集用の初期値をつくる */
+function buildAnimEditFromProblem(p){
+  const isReverse = p.op==="sub"; // sub: 到着(base)が分かっていて出発を求める→巻き戻し
+  if(p.level===1){
+    return { kind:"walk", reverse:isReverse, now:p.base, walk:p.delta, ride:20 };
+  }
+  if(p.level===2){
+    return { kind:"ride", reverse:isReverse, now:p.base, walk:10, ride:p.delta };
+  }
+  // level 5
+  const walk = p.walk!=null ? p.walk : Math.round(p.delta/2/5)*5;
+  const ride = p.ride!=null ? p.ride : (p.delta-walk);
+  return { kind:"walkride", reverse:isReverse, now:p.base, walk, ride };
+}
+
+/* いまの animEdit から、アニメ用の segs(区間)を組み立てる。
+   reverse=false: now が出発、そこから+方向に進む
+   reverse=true : now が到着、そこから-方向に巻き戻る(表示は開始点から) */
+function buildAnimSpec(){
+  const e=animEdit;
+  let segs=[];
+  if(e.kind==="walk"){
+    segs=[{ kind:"walk", from:"家", to:"駅", dur:e.walk }];
+  }else if(e.kind==="ride"){
+    segs=[{ kind:"train", from:"A駅", to:"B駅", dur:e.ride }];
+  }else{
+    segs=[{ kind:"walk", from:"家", to:"A駅", dur:e.walk },{ kind:"train", from:"A駅", to:"B駅", dur:e.ride }];
+  }
+  const total = segs.reduce((a,s)=>a+s.dur,0);
+  const start = e.reverse ? norm(e.now-total) : e.now;
+  const knownIdx = e.reverse ? segs.length : 0;
+  const knownTime = e.now;
+  return { start, segs, knownIdx, knownTime, reverse:e.reverse };
+}
+
+/* ============================================================
+   モーダルの ひらきかた・すうじ編集
+============================================================ */
+function openAnimModal(p){
+  animCurrentProblem = p;
+  animEdit_setFromProblem(p);
+  document.getElementById("anim-modal").classList.add("show");
+  renderAnimFields();
+  setupAnimPlayback();
+}
+function animEdit_setFromProblem(p){
+  const e = buildAnimEditFromProblem(p);
+  animEdit.kind=e.kind; animEdit.reverse=e.reverse; animEdit.now=e.now; animEdit.walk=e.walk; animEdit.ride=e.ride;
+}
+function closeAnimModal(){
+  stopAnimAll();
+  document.getElementById("anim-modal").classList.remove("show");
+}
+
+function renderAnimFields(){
+  const box=document.getElementById("anim-fields");
+  const e=animEdit;
+  const nowT=fmt(e.now);
+  let html="";
+  html+=animFieldTimeHtml("now-h","今の時こく(時)",nowT.h,0,23,1);
+  html+=animFieldTimeHtml("now-m","今の時こく(分)",nowT.mm,0,55,5);
+  if(e.kind==="walk" || e.kind==="walkride"){
+    html+=animFieldNumHtml("walk","歩く時間",e.walk,5,60,5,"分");
+  }
+  if(e.kind==="ride" || e.kind==="walkride"){
+    html+=animFieldNumHtml("ride","電車の時間",e.ride,5,90,5,"分");
+  }
+  box.innerHTML=html;
+  bindAnimFieldEvents();
+}
+function animFieldTimeHtml(key,label,val,min,max,step){
+  return `<div class="anim-field" data-key="${key}">
+    <span class="f-lbl">${label}</span>
+    <button class="anim-mini-step" data-act="minus" data-key="${key}">▽</button>
+    <input class="anim-mini-in" type="number" data-key="${key}" value="${val}" min="${min}" max="${max}" step="${step}">
+    <button class="anim-mini-step" data-act="plus" data-key="${key}">△</button>
+  </div>`;
+}
+function animFieldNumHtml(key,label,val,min,max,step,unit){
+  return `<div class="anim-field" data-key="${key}">
+    <span class="f-lbl">${label}</span>
+    <button class="anim-mini-step" data-act="minus" data-key="${key}">▽</button>
+    <input class="anim-mini-in" type="number" data-key="${key}" value="${val}" min="${min}" max="${max}" step="${step}">
+    <button class="anim-mini-step" data-act="plus" data-key="${key}">△</button>
+    <span class="anim-unit">${unit}</span>
+  </div>`;
+}
+
+function bindAnimFieldEvents(){
+  const box=document.getElementById("anim-fields");
+  box.querySelectorAll(".anim-mini-in").forEach(el=>{
+    el.addEventListener("change",()=> applyAnimFieldChange(el.dataset.key, parseInt(el.value)||0));
+  });
+  box.querySelectorAll(".anim-mini-step").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const key=btn.dataset.key;
+      const input=box.querySelector(`.anim-mini-in[data-key="${key}"]`);
+      const step=parseInt(input.step)||5;
+      const dir=btn.dataset.act==="plus" ? 1 : -1;
+      applyAnimFieldChange(key, (parseInt(input.value)||0) + dir*step);
+    });
+  });
+}
+function applyAnimFieldChange(key, raw){
+  if(key==="now-h"){
+    let v=Math.max(0,Math.min(23,raw));
+    const t=fmt(animEdit.now);
+    animEdit.now = v*60 + t.mm;
+  }else if(key==="now-m"){
+    let v=Math.max(0,Math.min(55,Math.round(raw/5)*5));
+    const t=fmt(animEdit.now);
+    animEdit.now = t.h*60 + v;
+  }else if(key==="walk"){
+    animEdit.walk = Math.max(5,Math.min(60,Math.round(raw/5)*5));
+  }else if(key==="ride"){
+    animEdit.ride = Math.max(5,Math.min(90,Math.round(raw/5)*5));
+  }
+  renderAnimFields();
+  setupAnimPlayback();
+}
+
+/* ============================================================
+   さいせい せいぎょ
+============================================================ */
+function setupAnimPlayback(){
+  stopAnimAll();
+  const spec = buildAnimSpec();
+  animRun.spec = spec;
+  const total = spec.segs.reduce((a,s)=>a+s.dur,0);
+  animRun.total=total;
+  animRun.durSec=Math.max(5, Math.min(10, total*0.4));
+  animRun.progress=0; animRun.playing=false; animRun.lastTs=null;
+
+  const scrub=document.getElementById("anim-scrub");
+  scrub.value = spec.reverse ? 1000 : 0;
+  scrub.oninput=(e)=>{
+    if(pendingPlayTimeout){ clearTimeout(pendingPlayTimeout); pendingPlayTimeout=null; }
+    stopAnimPlaying();
+    const v=parseInt(e.target.value)/1000;
+    animRun.progress = spec.reverse ? (1-v) : v;
+    renderAnimFrame();
+  };
+  const playBtn=document.getElementById("anim-play");
+  playBtn.onclick = toggleAnimPlay;
+  playBtn.textContent="▶";
+  renderAnimFrame();
+}
+function toggleAnimPlay(){
+  if(pendingPlayTimeout){ clearTimeout(pendingPlayTimeout); pendingPlayTimeout=null; }
+  if(animRun.playing) stopAnimPlaying(); else startAnimPlaying();
+}
+function stopAnimPlaying(){
+  animRun.playing=false;
+  const btn=document.getElementById("anim-play"); if(btn) btn.textContent="▶";
+  if(animId){ cancelAnimationFrame(animId); animId=null; }
+}
+function startAnimPlaying(){
+  const spec=animRun.spec;
+  if(animRun.progress>=1){
+    animRun.progress=0;
+    const scrub=document.getElementById("anim-scrub"); if(scrub) scrub.value = spec.reverse ? 1000 : 0;
+    renderAnimFrame();
+  }
+  animRun.playing=true; animRun.lastTs=null;
+  const btn=document.getElementById("anim-play"); if(btn) btn.textContent="❚❚";
+  animId=requestAnimationFrame(animStep);
+}
+function animStep(ts){
+  if(!animRun.playing) return;
+  if(animRun.lastTs===null) animRun.lastTs=ts;
+  const dt=(ts-animRun.lastTs)/1000; animRun.lastTs=ts;
+  animRun.progress += dt/animRun.durSec;
+  if(animRun.progress>=1){
+    animRun.progress=1; animRun.playing=false;
+    const btn=document.getElementById("anim-play"); if(btn) btn.textContent="▶";
+  }
+  const scrub=document.getElementById("anim-scrub");
+  const spec=animRun.spec;
+  if(scrub) scrub.value=Math.round((spec.reverse ? 1-animRun.progress : animRun.progress)*1000);
+  renderAnimFrame();
+  if(animRun.playing) animId=requestAnimationFrame(animStep);
+  else animId=null;
+}
+
+function renderAnimFrame(){
+  const spec=animRun.spec;
+  if(!spec) return;
+  const effP = spec.reverse ? (1-animRun.progress) : animRun.progress;
+  const curMin = spec.start + animRun.total*effP;
+  const hidePerson = !spec.reverse && animRun.progress<=0;
+  drawScene(spec, curMin, effP, true, hidePerson);
+}
+
+/* ============================================================
+   びょうが(元アプリの drawScene 一式を移植)
+============================================================ */
+function drawScene(spec, curMin, progress, canReveal, hidePerson){
+  const c=document.getElementById("anim-canvas");
+  if(!c) return;
+  const ctx=c.getContext("2d");
+  const W=c.width, H=c.height;
+  ctx.clearRect(0,0,W,H);
+
+  const groundY=H-46;
+  ctx.fillStyle="#dbe9f4"; ctx.fillRect(0,groundY,W-140,H-groundY);
+  ctx.strokeStyle="#b9d0e4"; ctx.lineWidth=3;
+  ctx.beginPath(); ctx.moveTo(0,groundY); ctx.lineTo(W-140,groundY); ctx.stroke();
+
+  drawPathScene(ctx, spec, progress, curMin, W, H, groundY, hidePerson);
+  drawClock(ctx, W-54, 48, 34, curMin);
+}
+
+function drawPathScene(ctx, spec, progress, curMin, W, H, groundY, hidePerson){
+  const trackLeft=60, trackRight=W-180;
+  const segs=spec.segs;
+  const totalDur=segs.reduce((a,s)=>a+s.dur,0);
+
+  const points=[segs[0].from];
+  segs.forEach(s=>points.push(s.to));
+  const xs=[trackLeft];
+  let acc=0;
+  segs.forEach(s=>{ acc+=s.dur; xs.push(trackLeft + (trackRight-trackLeft)*(acc/totalDur)); });
+
+  for(let i=0;i<points.length;i++){
+    const x=xs[i];
+    if(points[i]==="家") drawHouse(ctx,x,groundY);
+    else drawStation(ctx,x,groundY);
+    ctx.fillStyle="#2b3a4a"; ctx.font="16px 'BIZ UDPGothic'"; ctx.textAlign="center";
+    ctx.fillText(points[i], x, groundY+30);
+    if(spec.knownIdx===i){
+      ctx.fillStyle="#2f6fae"; ctx.font="bold 14px 'BIZ UDPGothic'";
+      ctx.fillText(jPlain(spec.knownTime), x, groundY-52);
+    }
+  }
+
+  if(hidePerson) return;
+
+  let px=trackLeft, kind="walk";
+  {
+    let moved=progress*totalDur;
+    let a=0;
+    for(let i=0;i<segs.length;i++){
+      if(moved<=a+segs[i].dur || i===segs.length-1){
+        const r=Math.min(1,Math.max(0,(moved-a)/segs[i].dur));
+        px = xs[i] + (xs[i+1]-xs[i])*r;
+        kind=segs[i].kind;
+        break;
+      }
+      a+=segs[i].dur;
+    }
+  }
+  if(kind==="walk") drawPerson(ctx,px,groundY,curMin);
+  else drawTrain(ctx,px,groundY);
+}
+
+function drawHouse(ctx,x,gy){
+  ctx.fillStyle="#f3b46b"; ctx.strokeStyle="#c98a3f"; ctx.lineWidth=2;
+  ctx.fillRect(x-16,gy-30,32,30); ctx.strokeRect(x-16,gy-30,32,30);
+  ctx.beginPath(); ctx.moveTo(x-20,gy-30); ctx.lineTo(x,gy-46); ctx.lineTo(x+20,gy-30); ctx.closePath();
+  ctx.fillStyle="#e07a5f"; ctx.fill();
+  ctx.fillStyle="#8b5e34"; ctx.fillRect(x-5,gy-18,10,18);
+}
+function drawStation(ctx,x,gy){
+  ctx.fillStyle="#8fb8de"; ctx.strokeStyle="#5f8fc0"; ctx.lineWidth=2;
+  ctx.fillRect(x-20,gy-34,40,34); ctx.strokeRect(x-20,gy-34,40,34);
+  ctx.fillStyle="#fff";
+  for(let i=0;i<2;i++)for(let j=0;j<2;j++) ctx.fillRect(x-13+i*16, gy-28+j*13, 10, 9);
+}
+function drawPerson(ctx,x,gy,curMin){
+  const bob=Math.sin(curMin*3)*2;
+  ctx.fillStyle="#3f8cd6";
+  ctx.beginPath(); ctx.arc(x,gy-30+bob,7,0,7); ctx.fill();
+  ctx.fillRect(x-5,gy-24+bob,10,16);
+  ctx.strokeStyle="#3f8cd6"; ctx.lineWidth=3;
+  const sw=Math.sin(curMin*4)*5;
+  ctx.beginPath(); ctx.moveTo(x-2,gy-8+bob); ctx.lineTo(x-4-sw,gy+bob);
+  ctx.moveTo(x+2,gy-8+bob); ctx.lineTo(x+4+sw,gy+bob); ctx.stroke();
+}
+function drawTrainBody(ctx,x,gy,w,h){
+  const y=gy-h;
+  ctx.fillStyle="#ff9f5a"; ctx.strokeStyle="#f0873a"; ctx.lineWidth=2;
+  ctx.beginPath();
+  ctx.moveTo(x-w/2, y+h);
+  ctx.lineTo(x-w/2, y+5);
+  ctx.quadraticCurveTo(x-w/2, y, x-w/2+7, y);
+  ctx.lineTo(x+w/2-11, y);
+  ctx.quadraticCurveTo(x+w/2, y, x+w/2, y+9);
+  ctx.lineTo(x+w/2, y+h);
+  ctx.closePath();
+  ctx.fill(); ctx.stroke();
+
+  ctx.fillStyle="#2f6fae";
+  ctx.fillRect(x-w/2, y+h*0.58, w, 4);
+
+  ctx.strokeStyle="#5a6b7b"; ctx.lineWidth=2; ctx.lineCap="round";
+  ctx.beginPath();
+  ctx.moveTo(x-6,y); ctx.lineTo(x-4,y-8); ctx.lineTo(x+4,y-8); ctx.lineTo(x+6,y);
+  ctx.stroke();
+  return y;
+}
+function drawTrainDoors(ctx,x,y,h,doorOpen,offset,doorW){
+  drawOneDoor(ctx,x-offset,y,h,doorOpen,doorW);
+  drawOneDoor(ctx,x+offset,y,h,doorOpen,doorW);
+}
+function drawOneDoor(ctx,cx,y,h,doorOpen,doorW){
+  const doorH=h-6;
+  const gapX=cx-doorW/2, gapY=y+3;
+  ctx.fillStyle="#3b4a5a";
+  ctx.fillRect(gapX,gapY,doorW,doorH);
+  const panelW=doorW/2;
+  const slide=panelW*0.9*doorOpen;
+  ctx.fillStyle="#dbe7f0"; ctx.strokeStyle="#17324d"; ctx.lineWidth=1.5;
+  ctx.fillRect(gapX-slide, gapY, panelW, doorH); ctx.strokeRect(gapX-slide, gapY, panelW, doorH);
+  ctx.fillRect(gapX+panelW+slide, gapY, panelW, doorH); ctx.strokeRect(gapX+panelW+slide, gapY, panelW, doorH);
+}
+function drawTrain(ctx,x,gy){
+  const w=64,h=26;
+  const y=drawTrainBody(ctx,x,gy,w,h);
+  ctx.fillStyle="#eaf3fb";
+  ctx.fillRect(x-9,y+6,8,8);
+  ctx.fillRect(x+1,y+6,8,8);
+  ctx.fillRect(x-30,y+6,8,8);
+  ctx.fillRect(x+22,y+6,8,8);
+  drawTrainDoors(ctx,x,y,h,0,16,12);
+}
+function drawClock(ctx,cx,cy,r,curMin){
+  ctx.fillStyle="#fff"; ctx.strokeStyle="#3f8cd6"; ctx.lineWidth=3;
+  ctx.beginPath(); ctx.arc(cx,cy,r,0,7); ctx.fill(); ctx.stroke();
+  ctx.strokeStyle="#9fb8cf"; ctx.lineWidth=2;
+  for(let i=0;i<12;i++){
+    const a=i*Math.PI/6;
+    ctx.beginPath();
+    ctx.moveTo(cx+Math.sin(a)*(r-4), cy-Math.cos(a)*(r-4));
+    ctx.lineTo(cx+Math.sin(a)*(r-9), cy-Math.cos(a)*(r-9));
+    ctx.stroke();
+  }
+  const t=fmt(curMin);
+  const mA=(t.mm/60)*2*Math.PI;
+  const hA=(((t.h%12)+t.mm/60)/12)*2*Math.PI;
+  ctx.strokeStyle="#2b3a4a"; ctx.lineWidth=4; ctx.lineCap="round";
+  ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx+Math.sin(hA)*(r*0.5), cy-Math.cos(hA)*(r*0.5)); ctx.stroke();
+  ctx.strokeStyle="#3f8cd6"; ctx.lineWidth=3;
+  ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx+Math.sin(mA)*(r*0.72), cy-Math.cos(mA)*(r*0.72)); ctx.stroke();
+  ctx.fillStyle="#2b3a4a"; ctx.beginPath(); ctx.arc(cx,cy,3,0,7); ctx.fill();
+  ctx.fillStyle="#5a6b7b"; ctx.font="11px 'BIZ UDPGothic'"; ctx.textAlign="center";
+  ctx.fillText("いま", cx, cy+r+16);
+  ctx.fillStyle="#2b3a4a"; ctx.font="bold 16px 'BIZ UDPGothic'";
+  ctx.fillText(jPlain(Math.round(curMin)), cx, cy+r+32);
+}
+
+/* ============================================================
    はいせん と きどう
 ============================================================ */
+document.getElementById("anim-close").addEventListener("click", closeAnimModal);
+document.getElementById("anim-reset").addEventListener("click",()=>{
+  if(animCurrentProblem) openAnimModal(animCurrentProblem);
+});
 document.getElementById("btn-back-setup").addEventListener("click",()=> show("screen-setup"));
 document.getElementById("btn-regenerate").addEventListener("click",()=>{
   generateProblems();
