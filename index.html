@@ -503,6 +503,19 @@ const state = {
 };
 const present = { idx:0 };
 
+/* iOS Safari では要素の中身を消しても、
+   文字が画面に残ったまま描き直されないことがある。
+   中身を消すのではなく、空の同じ要素に置きかえて
+   確実にレイアウトし直させる。 */
+function clearFeedbackEl(id){
+  const old=document.getElementById(id);
+  if(!old) return null;
+  const fresh=old.cloneNode(false);
+  old.parentNode.replaceChild(fresh, old);
+  void fresh.offsetHeight;
+  return fresh;
+}
+
 /* ============================================================
    せってい画面
 ============================================================ */
@@ -891,6 +904,19 @@ function showScreen(id){
 ============================================================ */
 const qa = { idx:0 };
 
+/* iOS Safari では要素の中身を消しても、
+   文字が画面に残ったまま描き直されないことがある。
+   中身を消すのではなく、空の同じ要素に置きかえて
+   確実にレイアウトし直させる。 */
+function clearFeedback(id){
+  const old=document.getElementById(id);
+  if(!old) return null;
+  const fresh=old.cloneNode(false);
+  old.parentNode.replaceChild(fresh, old);
+  void fresh.offsetHeight;
+  return fresh;
+}
+
 function startAnim(){
   qa.idx=0;
   showScreen("screen-anim");
@@ -904,8 +930,7 @@ function renderAnimQuestion(){
   document.getElementById("anim-progress").textContent = \`問題 \${qa.idx+1} / \${ANIM_DATA.length}\`;
   document.getElementById("anim-question").innerHTML=p.q;
 
-  const fb=document.getElementById("anim-feedback");
-  fb.innerHTML=""; fb.textContent="";
+  const fb=clearFeedback("anim-feedback");
 
   /* ボタンはcanvas描画より先に作り直す。
      万一canvasの描画で例外が出ても、答え表示のクリアと
@@ -930,7 +955,7 @@ function renderAnimQuestion(){
 function revealQAnim(){
   const p=ANIM_DATA[qa.idx];
   qanim.revealed=true;
-  document.getElementById("anim-feedback").innerHTML = \`答えは <b>\${jPlain(p.anim.ans)}</b> だよ\`;
+  document.getElementById("anim-feedback").textContent = \`答えは \${jPlain(p.anim.ans)} だよ\`;
   document.getElementById("btn-anim-reveal").disabled=true;
   renderQAnimFrame();
 }
@@ -1315,8 +1340,7 @@ function renderPresentQuestion(){
   document.getElementById("present-progress").innerHTML=`問題 ${present.idx+1} / ${state.problems.length}`;
   document.getElementById("present-question").innerHTML=p.q;
 
-  const fb=document.getElementById("present-feedback");
-  fb.innerHTML=""; fb.textContent="";
+  const fb=clearFeedbackEl("present-feedback");
 
   /* ボタンはcanvas描画より先に作り直す。
      万一canvasの描画で例外が出ても、答え表示のクリアと
@@ -1347,7 +1371,7 @@ function presentReveal(){
   const p=state.problems[present.idx];
   presentAnim.revealed=true;
   const fb=document.getElementById("present-feedback");
-  fb.innerHTML=`答えは <b>${jPlain(p.anim.ans)}</b> だよ`;
+  fb.textContent = `答えは ${jPlain(p.anim.ans)} だよ`;
   document.getElementById("btn-present-reveal").disabled=true;
   renderPresentFrame();
 }
