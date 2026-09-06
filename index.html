@@ -147,7 +147,7 @@
     width:210mm;
     min-height:297mm;
     margin:0 auto;
-    padding:15mm 10mm 15mm 20mm;
+    padding:15mm 10mm 15mm 28mm;
     box-shadow:0 2px 10px rgba(0,0,0,.15);
   }
   .sheet .headline{
@@ -163,14 +163,14 @@
   }
   .sheet .name-row .lbl{ font-size:12pt; }
   .sheet .name-row .paren{ font-size:12pt; letter-spacing:2px; }
-  .sheet .q-item{ display:flex; gap:10px; margin-bottom:16px; }
+  .sheet .q-item{ display:flex; gap:10px; margin-bottom:32px; align-items:baseline; }
   .sheet .q-num{
-    flex:0 0 auto; font-size:12pt; font-weight:700; min-width:1.6em;
+    flex:0 0 auto; font-size:13pt; font-weight:700; min-width:1.6em; line-height:2.3;
   }
-  .sheet .q-text{ font-size:12pt; line-height:2; }
-  .sheet .blank{ font-size:13pt; margin-top:6px; font-weight:700; }
+  .sheet .q-text{ font-size:13pt; line-height:2.3; }
+  .sheet .blank{ font-size:14pt; margin-top:6px; font-weight:700; }
   .sheet .fillline{ display:inline-block; min-width:6em; text-align:center; }
-  .sheet .choices{ display:flex; flex-wrap:wrap; gap:10px 18px; margin-top:8px; font-size:12pt; }
+  .sheet .choices{ display:flex; flex-wrap:wrap; gap:12px 18px; margin-top:8px; font-size:13pt; line-height:1.8; }
   .sheet .choice{ padding:2px 4px; }
   .sheet .choice.correct{ font-weight:700; text-decoration:underline; }
 
@@ -201,7 +201,7 @@
         <span class="label">種類</span>
         <div class="seg" id="chip-level">
           <button class="chip on" data-v="1"><span class="box">✓</span>歩く時間</button>
-          <button class="chip on" data-v="2"><span class="box">✓</span>電車の時間</button>
+          <button class="chip" data-v="2"><span class="box"></span>電車の時間</button>
           <button class="chip" data-v="5"><span class="box"></span>B駅まで</button>
         </div>
       </div>
@@ -210,8 +210,8 @@
       <div class="set-row">
         <span class="label">むずかしさ</span>
         <div class="seg" id="seg-diff">
-          <button data-v="easy">時をこえない</button>
-          <button data-v="normal" class="on">時をこえる</button>
+          <button data-v="easy" class="on">時をこえない</button>
+          <button data-v="normal">時をこえる</button>
         </div>
       </div>
 
@@ -227,8 +227,8 @@
       <div class="set-row">
         <span class="label">答え方</span>
         <div class="seg" id="seg-mode">
-          <button data-v="fill" class="on">空欄に書く</button>
-          <button data-v="choice">4択から選ぶ</button>
+          <button data-v="fill">空欄に書く</button>
+          <button data-v="choice" class="on">4択から選ぶ</button>
         </div>
       </div>
 
@@ -236,7 +236,7 @@
         <span class="label">問題の数</span>
         <div class="stepper-box">
           <button class="step-btn" id="cnt-minus">▽</button>
-          <input class="num-in" id="cnt-in" type="number" inputmode="numeric" value="6" min="1" max="30">
+          <input class="num-in" id="cnt-in" type="number" inputmode="numeric" value="4" min="1" max="30">
           <button class="step-btn" id="cnt-plus">△</button>
           <span class="unit">問</span>
         </div>
@@ -490,7 +490,7 @@ function buildChoices(ansMin, raw){
    じょうたい
 ============================================================ */
 const state = {
-  settings:{ levels:[1,2], diff:"normal", direction:"random", mode:"fill", count:6 },
+  settings:{ levels:[1], diff:"easy", direction:"random", mode:"choice", count:4 },
   problems:[],   // { level, q, ansH, ansM, choices:[{h,m,correct}]|null, _wrongCount }
   tab:"problem", // problem | answer
 };
@@ -528,9 +528,9 @@ function bindSetup(){
     });
   });
   const cnt=document.getElementById("cnt-in");
-  const clampCnt=()=>{ let v=parseInt(cnt.value)||6; v=Math.max(1,Math.min(30,v)); cnt.value=v; state.settings.count=v; };
-  document.getElementById("cnt-minus").addEventListener("click",()=>{ cnt.value=(parseInt(cnt.value)||6)-1; clampCnt(); });
-  document.getElementById("cnt-plus").addEventListener("click",()=>{ cnt.value=(parseInt(cnt.value)||6)+1; clampCnt(); });
+  const clampCnt=()=>{ let v=parseInt(cnt.value)||4; v=Math.max(1,Math.min(30,v)); cnt.value=v; state.settings.count=v; };
+  document.getElementById("cnt-minus").addEventListener("click",()=>{ cnt.value=(parseInt(cnt.value)||4)-1; clampCnt(); });
+  document.getElementById("cnt-plus").addEventListener("click",()=>{ cnt.value=(parseInt(cnt.value)||4)+1; clampCnt(); });
   cnt.addEventListener("change",clampCnt);
 
   document.getElementById("btn-generate").addEventListener("click", generateAndGo);
@@ -750,7 +750,7 @@ function buildPrintHtml(mode){
     width:210mm;
     min-height:297mm;
     margin:0 auto;
-    padding:15mm 10mm 15mm 20mm;
+    padding:15mm 10mm 15mm 28mm;
     box-shadow:0 2px 10px rgba(0,0,0,.15);
   }
   .headline{
@@ -767,14 +767,14 @@ function buildPrintHtml(mode){
   .name-row .lbl{ font-size:12pt; }
   .name-row .paren{ font-size:12pt; letter-spacing:2px; }
 
-  .q-item{ display:flex; gap:10px; margin-bottom:16px; page-break-inside:avoid; }
+  .q-item{ display:flex; gap:10px; margin-bottom:32px; page-break-inside:avoid; align-items:baseline; }
   .q-num{
-    flex:0 0 auto; font-size:12pt; font-weight:700; min-width:1.6em;
+    flex:0 0 auto; font-size:13pt; font-weight:700; min-width:1.6em; line-height:2.3;
   }
-  .q-text{ font-size:12pt; line-height:2; }
-  .blank{ font-size:13pt; margin-top:6px; font-weight:700; }
+  .q-text{ font-size:13pt; line-height:2.3; }
+  .blank{ font-size:14pt; margin-top:6px; font-weight:700; }
   .fillline{ display:inline-block; min-width:6em; text-align:center; }
-  .choices{ display:flex; flex-wrap:wrap; gap:10px 18px; margin-top:8px; font-size:12pt; }
+  .choices{ display:flex; flex-wrap:wrap; gap:12px 18px; margin-top:8px; font-size:13pt; line-height:1.8; }
   .choice{ padding:2px 4px; }
   .choice.correct{ font-weight:700; text-decoration:underline; }
 
