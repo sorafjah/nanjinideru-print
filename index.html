@@ -897,10 +897,25 @@ function startAnim(){
   renderAnimQuestion();
 }
 function renderAnimQuestion(){
+  stopQAnim();
+  qanim.revealed=false;
+
   const p=ANIM_DATA[qa.idx];
   document.getElementById("anim-progress").textContent = \`問題 \${qa.idx+1} / \${ANIM_DATA.length}\`;
   document.getElementById("anim-question").innerHTML=p.q;
-  document.getElementById("anim-feedback").textContent="";
+
+  const fb=document.getElementById("anim-feedback");
+  fb.innerHTML=""; fb.textContent="";
+
+  /* ボタンはcanvas描画より先に作り直す。
+     万一canvasの描画で例外が出ても、答え表示のクリアと
+     ボタンの状態リセットが確実に済むようにするため。 */
+  const row=document.getElementById("anim-btn-row");
+  row.innerHTML=\`
+    <button id="btn-anim-reveal">答えを見る</button>
+    <button id="btn-anim-next">次へ</button>\`;
+  document.getElementById("btn-anim-reveal").addEventListener("click", revealQAnim);
+  document.getElementById("btn-anim-next").addEventListener("click", nextQAnim);
 
   const slot=document.getElementById("anim-slot");
   slot.innerHTML=\`
@@ -911,13 +926,6 @@ function renderAnimQuestion(){
       <button class="qanim-playbtn" id="qanim-fwd">▷</button>
     </div>\`;
   setupQAnim(p.anim);
-
-  const row=document.getElementById("anim-btn-row");
-  row.innerHTML=\`
-    <button id="btn-anim-reveal">答えを見る</button>
-    <button id="btn-anim-next">次へ</button>\`;
-  document.getElementById("btn-anim-reveal").addEventListener("click", revealQAnim);
-  document.getElementById("btn-anim-next").addEventListener("click", nextQAnim);
 }
 function revealQAnim(){
   const p=ANIM_DATA[qa.idx];
@@ -1196,10 +1204,15 @@ document.getElementById("btn-anim-exit").addEventListener("click",()=>{ stopQAni
 document.getElementById("btn-anim-again").addEventListener("click", startAnim);
 document.getElementById("btn-anim-back").addEventListener("click",()=>{ showScreen("screen-print"); });
 
+/* ダブルタップズーム防止。
+   ただしボタンなどの操作要素へのタップで preventDefault すると
+   iOS では click 自体が発火しなくなるため、操作要素は対象外にする。 */
 let lastTouch=0;
 document.addEventListener("touchend",e=>{
   const now=Date.now();
-  if(now-lastTouch<=300){ e.preventDefault(); }
+  const t=e.target;
+  const interactive = t && t.closest && t.closest("button,input,select,textarea,a,label");
+  if(!interactive && now-lastTouch<=300){ e.preventDefault(); }
   lastTouch=now;
 },{passive:false});
 document.addEventListener("gesturestart",e=>{ e.preventDefault(); });
@@ -1294,11 +1307,21 @@ function startPresent(){
 }
 
 function renderPresentQuestion(){
+  stopPresentAnim();
+  presentAnim.revealed=false;
+
   const p=state.problems[present.idx];
 
   document.getElementById("present-progress").innerHTML=`問題 ${present.idx+1} / ${state.problems.length}`;
   document.getElementById("present-question").innerHTML=p.q;
-  document.getElementById("present-feedback").textContent="";
+
+  const fb=document.getElementById("present-feedback");
+  fb.innerHTML=""; fb.textContent="";
+
+  /* ボタンはcanvas描画より先に作り直す。
+     万一canvasの描画で例外が出ても、答え表示のクリアと
+     ボタンの状態リセットが確実に済むようにするため。 */
+  buildPresentButtons();
 
   const aslot=document.getElementById("present-anim-slot");
   aslot.innerHTML=`
@@ -1309,8 +1332,6 @@ function renderPresentQuestion(){
       <button class="panim-playbtn" id="panim-fwd">▷</button>
     </div>`;
   setupPresentAnim(p.anim);
-
-  buildPresentButtons();
 }
 
 function buildPresentButtons(){
@@ -1632,10 +1653,15 @@ document.getElementById("btn-present-exit").addEventListener("click",()=>{ stopP
 document.getElementById("btn-present-again").addEventListener("click", startPresent);
 document.getElementById("btn-present-back").addEventListener("click",()=> show("screen-edit"));
 
+/* ダブルタップズーム防止。
+   ただしボタンなどの操作要素へのタップで preventDefault すると
+   iOS では click 自体が発火しなくなるため、操作要素は対象外にする。 */
 let lastTouch=0;
 document.addEventListener("touchend",e=>{
   const now=Date.now();
-  if(now-lastTouch<=300){ e.preventDefault(); }
+  const t=e.target;
+  const interactive = t && t.closest && t.closest("button,input,select,textarea,a,label");
+  if(!interactive && now-lastTouch<=300){ e.preventDefault(); }
   lastTouch=now;
 },{passive:false});
 document.addEventListener("gesturestart",e=>{ e.preventDefault(); });
