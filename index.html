@@ -91,39 +91,11 @@
   .choice-edit .c-item{ display:flex; align-items:center; gap:4px; background:var(--bg); border-radius:10px; padding:4px 8px; border:2px solid var(--line); }
   .choice-edit .c-item.correct{ border-color:var(--correct); background:#e9f7f0; }
   .del-btn{ background:none; color:var(--ink-soft); font-size:13px; text-decoration:underline; box-shadow:none; padding:4px; min-height:auto; }
-  .reveal-btn{ min-height:44px; padding:0 16px; font-size:15px; background:var(--soft); color:var(--primary-dark); border:2px solid var(--line); margin-top:10px; }
-  .reveal-btn:active{ background:#dcebf7; }
+  .ans-note{ font-size:12px; color:var(--ink-soft); margin-top:4px; }
 
   .out-actions{ display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin:16px 0 8px; }
 
-  /* アニメモーダル */
-  .anim-modal-bg{ display:none; position:fixed; inset:0; background:rgba(43,58,74,.55); z-index:60; align-items:center; justify-content:center; padding:12px; }
-  .anim-modal-bg.show{ display:flex; }
-  .anim-modal{ background:#fff; border-radius:20px; padding:18px 18px 20px; max-width:600px; width:100%; max-height:92vh; overflow-y:auto; box-shadow:0 12px 34px rgba(0,0,0,.28); }
-  .anim-modal-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
-  .anim-modal-head h2{ font-size:19px; margin:0; color:var(--primary-dark); }
-  .anim-close{ min-height:40px; min-width:40px; padding:0; font-size:18px; background:#eef4fa; color:var(--ink-soft); border-radius:10px; }
-
-  .anim-canvas-wrap canvas{ width:100%; max-width:560px; height:auto; background:#eef5fb; border-radius:14px; display:block; margin:0 auto; }
-  .anim-controls{ display:flex; align-items:center; gap:12px; max-width:560px; margin:8px auto 2px; }
-  .anim-playbtn{ width:40px; height:40px; border-radius:50%; background:#fff; color:var(--primary); font-size:13px; border:2px solid var(--line); flex:0 0 auto; }
-  .anim-playbtn:active{ background:var(--soft); }
-  .anim-range{ flex:1; height:40px; -webkit-appearance:none; appearance:none; background:transparent; touch-action:pan-x; }
-  .anim-range::-webkit-slider-runnable-track{ height:6px; border-radius:6px; background:var(--line); }
-  .anim-range::-webkit-slider-thumb{ -webkit-appearance:none; width:26px; height:26px; margin-top:-10px; border-radius:50%; background:var(--primary); border:3px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,.25); }
-  .anim-range::-moz-range-track{ height:6px; border-radius:6px; background:var(--line); }
-  .anim-range::-moz-range-thumb{ width:26px; height:26px; border-radius:50%; background:var(--primary); border:3px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,.25); }
-
-  .anim-fields{ display:flex; flex-wrap:wrap; gap:10px 18px; margin-top:14px; padding-top:12px; border-top:2px solid var(--line); }
-  .anim-field{ display:flex; align-items:center; gap:6px; }
-  .anim-field .f-lbl{ font-size:14px; color:var(--ink-soft); width:5.5em; }
-  .anim-mini-step{ width:36px; height:36px; font-size:18px; border-radius:8px; background:#fff; color:var(--primary); border:2px solid var(--line); }
-  .anim-mini-step:active{ background:var(--soft); }
-  .anim-mini-in{ width:52px; height:36px; font-size:15px; text-align:center; border:2px solid var(--line); border-radius:8px; font-family:inherit; font-weight:700; }
-  .anim-unit{ font-size:13px; color:var(--ink-soft); }
-  .anim-reset-btn{ min-height:38px; padding:0 14px; font-size:14px; background:#fff; color:var(--primary); border:2px solid var(--line); margin-top:10px; }
-
-  /* モーダル */
+  /* モーダル(はじめてガイドのみ) */
   .modal-bg{ display:none; position:fixed; inset:0; background:rgba(43,58,74,.5); z-index:50; align-items:center; justify-content:center; padding:16px; }
   .modal-bg.show{ display:flex; }
   .modal{ background:#fff; border-radius:18px; padding:22px 24px; max-width:520px; width:100%; max-height:86vh; overflow-y:auto; box-shadow:0 10px 30px rgba(0,0,0,.25); }
@@ -184,6 +156,33 @@
     .no-print{ display:none !important; }
     @page{ size:A4; margin:0; }
   }
+
+  /* ============================================================
+     発表モード(「みんなで考える」と同じ見た目・体験)
+  ============================================================ */
+  #screen-present, #screen-present-result{ max-width:1100px; margin:0 auto; }
+  .present-topbar{ display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+  .present-home-btn{ min-height:44px; padding:0 14px; font-size:15px; background:#fff; color:var(--primary); border:2px solid var(--line); }
+  .present-progress{ text-align:center; color:var(--ink-soft); font-size:15px; margin-bottom:6px; }
+  .present-question{ font-size:23px; text-align:center; margin:2px 4px 10px; }
+  .present-question .hl{ color:var(--primary-dark); font-weight:700; }
+
+  .panim-wrap{ text-align:center; margin:4px 0; }
+  .panim-wrap canvas{ width:100%; max-width:900px; height:auto; background:#eef5fb; border-radius:18px; display:block; margin:0 auto; box-shadow:0 6px 20px rgba(46,90,140,.16); }
+  .panim-controls{ display:flex; align-items:center; gap:10px; max-width:900px; margin:12px auto 4px; }
+  .panim-playbtn{ width:48px; height:48px; min-width:48px; border-radius:50%; background:#dceefc; color:var(--primary-dark); font-size:18px; border:none; flex:0 0 auto; display:flex; align-items:center; justify-content:center; }
+  .panim-playbtn:active{ background:#c8e4f9; }
+  .panim-playbtn.active{ background:var(--primary); color:#fff; }
+  .panim-range{ flex:1; height:48px; -webkit-appearance:none; appearance:none; background:transparent; touch-action:pan-x; }
+  .panim-range::-webkit-slider-runnable-track{ height:8px; border-radius:8px; background:#dceefc; }
+  .panim-range::-webkit-slider-thumb{ -webkit-appearance:none; width:28px; height:28px; margin-top:-10px; border-radius:50%; background:#dceefc; border:3px solid var(--primary); box-shadow:0 1px 4px rgba(0,0,0,.2); }
+  .panim-range::-moz-range-track{ height:8px; border-radius:8px; background:#dceefc; }
+  .panim-range::-moz-range-thumb{ width:28px; height:28px; border-radius:50%; background:#dceefc; border:3px solid var(--primary); box-shadow:0 1px 4px rgba(0,0,0,.2); }
+
+  .present-feedback{ text-align:center; font-size:22px; font-weight:700; min-height:30px; margin:10px 0 2px; color:var(--correct-dark); }
+
+  .present-result-big{ font-size:28px; text-align:center; font-weight:700; color:var(--primary-dark); margin:8px 0; }
+  .present-result-msg{ text-align:center; font-size:19px; margin:8px 0 16px; }
 </style>
 </head>
 <body>
@@ -271,8 +270,9 @@
     </div>
 
     <div class="out-actions">
-      <button class="btn correct" id="btn-goto-print">今のタブを印刷プレビュー</button>
-      <button class="btn ghost small" id="btn-download">代わりにHTMLをダウンロード</button>
+      <button class="btn ghost small" id="btn-present">解答アニメ</button>
+      <button class="btn ghost small" id="btn-goto-print">印刷</button>
+      <button class="btn ghost small" id="btn-download">HTMLをダウンロード</button>
       <button class="btn ghost small" id="btn-copy">HTMLをコピーする</button>
     </div>
   </section>
@@ -288,27 +288,31 @@
     </div>
   </section>
 
-</div>
-
-<!-- アニメで見る モーダル -->
-<div class="anim-modal-bg" id="anim-modal">
-  <div class="anim-modal">
-    <div class="anim-modal-head">
-      <h2>アニメで見る</h2>
-      <button class="anim-close" id="anim-close">✕</button>
+  <!-- 発表モード:活動画面(みんなで考えると同じ体験) -->
+  <section id="screen-present" class="screen">
+    <div class="present-topbar">
+      <button class="present-home-btn" id="btn-present-exit">← 編集にもどる</button>
+      <div class="present-progress" id="present-progress"></div>
     </div>
-    <div class="anim-canvas-wrap">
-      <canvas id="anim-canvas" width="560" height="170"></canvas>
-      <div class="anim-controls">
-        <button class="anim-playbtn" id="anim-play">▶</button>
-        <input type="range" id="anim-scrub" class="anim-range" min="0" max="1000" value="0">
+    <div class="card">
+      <div class="present-question" id="present-question"></div>
+      <div id="present-anim-slot" class="panim-wrap"></div>
+      <div class="present-feedback" id="present-feedback"></div>
+      <div class="btn-row" id="present-btn-row"></div>
+    </div>
+  </section>
+
+  <!-- 発表モード:終了画面 -->
+  <section id="screen-present-result" class="screen">
+    <div class="card">
+      <div class="present-result-big">みんな　よく　考えたね！</div>
+      <div class="btn-row">
+        <button class="btn ghost" id="btn-present-again">もう一度みる</button>
+        <button class="btn ghost" id="btn-present-back">編集にもどる</button>
       </div>
     </div>
-    <div class="anim-fields" id="anim-fields"></div>
-    <div style="text-align:center;">
-      <button class="anim-reset-btn" id="anim-reset">この問題の数字にもどす</button>
-    </div>
-  </div>
+  </section>
+
 </div>
 
 <!-- はじめてガイド -->
@@ -318,8 +322,9 @@
     <ol>
       <li>種類・むずかしさ・答え方・問題数を選んで「問題を作る」を押してね。</li>
       <li>作られた問題は、1問ずつ文章や数字を書きかえられるよ。</li>
+      <li>「解答アニメ」を押すと、大きな画面でアニメを見せながら1問ずつ答えを確かめられるよ。</li>
       <li>タブで「問題プリント」と「解答プリント(答え入り)」を切りかえられるよ。</li>
-      <li>「印刷プレビュー」を押すと、そのまま印刷できる画面になるよ。A4で1枚印刷できるよ。</li>
+      <li>「印刷」を押すと、そのまま印刷できる画面になるよ。A4で1枚印刷できるよ。</li>
     </ol>
     <div class="set-row">
       <button class="chip" id="help-noshow"><span class="box"></span>次回から表示しない</button>
@@ -337,7 +342,6 @@
    じかんの けいさん(0時からの ぷんで あつかう / すべて5分きざみ)
 ============================================================ */
 function fmt(m){ m=((m%1440)+1440)%1440; return {h:Math.floor(m/60), mm:m%60}; }
-/* 分が0のときは「分」を省略して「8時」のように表す */
 function jRuby(m){ const t=fmt(m); return t.mm===0 ? `${t.h}時` : `${t.h}時${t.mm}分`; }
 function jHL(m){ return `<b>${jRuby(m)}</b>`; }
 function jPlain(m){ const t=fmt(m); return t.mm===0 ? `${t.h}時` : `${t.h}時${t.mm}分`; }
@@ -349,9 +353,6 @@ function rM5(range){ const a=range[0], b=range[1]; const steps=Math.max(0,Math.f
 function time5(hmin,hmax){ return rInt(hmin,hmax)*60 + rInt(0,11)*5; }
 function norm(m){ return ((m%1440)+1440)%1440; }
 
-/* むずかしさパラメーター(すべて5分きざみ)
-   easy   = 「時をこえない」: 短い時間で、時刻が1時間の中におさまる
-   normal = 「時をこえる」  : 時をまたぐ計算も出る */
 const DIFF = {
   easy:   { walk:[5,15],  ride:[10,25], crossHour:false },
   normal: { walk:[5,20],  ride:[10,35], crossHour:true  },
@@ -359,6 +360,7 @@ const DIFF = {
 
 /* ============================================================
    もんだい せいせい(れべる1・2・5のみ)
+   raw.anim = アニメ描画用の元データ(正答欄が手動編集されても変化しない)
 ============================================================ */
 function pickBack(direction){
   if(direction==="depart") return false;
@@ -366,8 +368,6 @@ function pickBack(direction){
   return Math.random()<0.5;
 }
 
-/* op: 'add'(base+delta=ans) または 'sub'(base-delta=ans)。
-   ダミー選択肢の「繰り上がり/繰り下がり忘れ」を再現するために使う。 */
 function makeRawProblem(level, settings){
   const p = DIFF[settings.diff];
   const back = pickBack(settings.direction);
@@ -378,12 +378,20 @@ function makeRawProblem(level, settings){
       let now;
       do{ now=time5(7,17); }while(!p.crossHour && !sameHour(now, now+walk));
       const ans = now+walk;
-      return { level, q:`<ruby>家<rt>いえ</rt></ruby>から<ruby>駅<rt>えき</rt></ruby>まで<ruby>歩<rt>ある</rt></ruby>いて ${walk}分かかります。<br><ruby>今<rt>いま</rt></ruby> ${jHL(now)}です。<br>何時何分に<ruby>駅<rt>えき</rt></ruby>に<ruby>着<rt>つ</rt></ruby>きますか。`, ans, op:"add", base:now, delta:walk };
+      return {
+        level, q:`<ruby>家<rt>いえ</rt></ruby>から<ruby>駅<rt>えき</rt></ruby>まで<ruby>歩<rt>ある</rt></ruby>いて ${walk}分かかります。<br><ruby>今<rt>いま</rt></ruby> ${jHL(now)}です。<br>何時何分に<ruby>駅<rt>えき</rt></ruby>に<ruby>着<rt>つ</rt></ruby>きますか。`,
+        ans, op:"add", base:now, delta:walk,
+        anim:{ start:now, segs:[{kind:"walk", from:"家", to:"駅", dur:walk}], knownIdx:0, knownTime:now, reverse:false, ans }
+      };
     }else{
       let arr;
       do{ arr=time5(8,18); }while(!p.crossHour && !sameHour(arr, arr-walk));
       const ans = arr-walk;
-      return { level, q:`${jHL(arr)}に<ruby>駅<rt>えき</rt></ruby>に<ruby>着<rt>つ</rt></ruby>きたいです。<br><ruby>歩<rt>ある</rt></ruby>くと ${walk}分かかります。<br>何時何分に<ruby>家<rt>いえ</rt></ruby>を<ruby>出<rt>で</rt></ruby>たらいいですか。`, ans, op:"sub", base:arr, delta:walk };
+      return {
+        level, q:`${jHL(arr)}に<ruby>駅<rt>えき</rt></ruby>に<ruby>着<rt>つ</rt></ruby>きたいです。<br><ruby>歩<rt>ある</rt></ruby>くと ${walk}分かかります。<br>何時何分に<ruby>家<rt>いえ</rt></ruby>を<ruby>出<rt>で</rt></ruby>たらいいですか。`,
+        ans, op:"sub", base:arr, delta:walk,
+        anim:{ start:ans, segs:[{kind:"walk", from:"家", to:"駅", dur:walk}], knownIdx:1, knownTime:arr, reverse:true, ans }
+      };
     }
   }
 
@@ -393,16 +401,23 @@ function makeRawProblem(level, settings){
       let now;
       do{ now=time5(7,17); }while(!p.crossHour && !sameHour(now, now+ride));
       const ans = now+ride;
-      return { level, q:`${jHL(now)}に<ruby>電車<rt>でんしゃ</rt></ruby>に<ruby>乗<rt>の</rt></ruby>りました。<br><ruby>電車<rt>でんしゃ</rt></ruby>は ${ride}分かかります。<br>何時何分に<ruby>着<rt>つ</rt></ruby>きますか。`, ans, op:"add", base:now, delta:ride };
+      return {
+        level, q:`${jHL(now)}に<ruby>電車<rt>でんしゃ</rt></ruby>に<ruby>乗<rt>の</rt></ruby>りました。<br><ruby>電車<rt>でんしゃ</rt></ruby>は ${ride}分かかります。<br>何時何分に<ruby>着<rt>つ</rt></ruby>きますか。`,
+        ans, op:"add", base:now, delta:ride,
+        anim:{ start:now, segs:[{kind:"train", from:"A駅", to:"B駅", dur:ride}], knownIdx:0, knownTime:now, reverse:false, ans }
+      };
     }else{
       let arr;
       do{ arr=time5(8,18); }while(!p.crossHour && !sameHour(arr, arr-ride));
       const ans = arr-ride;
-      return { level, q:`${jHL(arr)}に<ruby>着<rt>つ</rt></ruby>きたいです。<br><ruby>電車<rt>でんしゃ</rt></ruby>は ${ride}分かかります。<br>何時何分の<ruby>電車<rt>でんしゃ</rt></ruby>に<ruby>乗<rt>の</rt></ruby>ればいいですか。`, ans, op:"sub", base:arr, delta:ride };
+      return {
+        level, q:`${jHL(arr)}に<ruby>着<rt>つ</rt></ruby>きたいです。<br><ruby>電車<rt>でんしゃ</rt></ruby>は ${ride}分かかります。<br>何時何分の<ruby>電車<rt>でんしゃ</rt></ruby>に<ruby>乗<rt>の</rt></ruby>ればいいですか。`,
+        ans, op:"sub", base:arr, delta:ride,
+        anim:{ start:arr-ride, segs:[{kind:"train", from:"A駅", to:"B駅", dur:ride}], knownIdx:1, knownTime:arr, reverse:true, ans }
+      };
     }
   }
 
-  // level 5(2段階の合計/差分。ダミー生成は合計delta・単純足し引きとして扱う)
   const walk = rM5(p.walk);
   const ride = rM5(p.ride);
   const totalDelta = walk+ride;
@@ -410,29 +425,26 @@ function makeRawProblem(level, settings){
     let goal;
     do{ goal = time5(9,17); }while( goal - ride - walk < 6*60 );
     const ans = goal - ride - walk;
-    return { level, q:`B<ruby>駅<rt>えき</rt></ruby>に ${jHL(goal)}に<ruby>着<rt>つ</rt></ruby>きたいです。<br><ruby>家<rt>いえ</rt></ruby>からA<ruby>駅<rt>えき</rt></ruby>まで<ruby>歩<rt>ある</rt></ruby>いて ${walk}分、A<ruby>駅<rt>えき</rt></ruby>からB<ruby>駅<rt>えき</rt></ruby>まで<ruby>電車<rt>でんしゃ</rt></ruby>で ${ride}分かかります。<br>何時何分に<ruby>家<rt>いえ</rt></ruby>を<ruby>出<rt>で</rt></ruby>たらいいですか。`, ans, op:"sub", base:goal, delta:totalDelta, walk, ride };
+    return {
+      level, q:`B<ruby>駅<rt>えき</rt></ruby>に ${jHL(goal)}に<ruby>着<rt>つ</rt></ruby>きたいです。<br><ruby>家<rt>いえ</rt></ruby>からA<ruby>駅<rt>えき</rt></ruby>まで<ruby>歩<rt>ある</rt></ruby>いて ${walk}分、A<ruby>駅<rt>えき</rt></ruby>からB<ruby>駅<rt>えき</rt></ruby>まで<ruby>電車<rt>でんしゃ</rt></ruby>で ${ride}分かかります。<br>何時何分に<ruby>家<rt>いえ</rt></ruby>を<ruby>出<rt>で</rt></ruby>たらいいですか。`,
+      ans, op:"sub", base:goal, delta:totalDelta, walk, ride,
+      anim:{ start:ans, segs:[{kind:"walk",from:"家",to:"A駅",dur:walk},{kind:"train",from:"A駅",to:"B駅",dur:ride}], knownIdx:2, knownTime:goal, reverse:true, ans }
+    };
   }else{
     let now;
     do{ now = time5(7,17); }while( now + walk + ride >= 24*60 );
     const ans = now + walk + ride;
-    return { level, q:`<ruby>今<rt>いま</rt></ruby> ${jHL(now)}です。<ruby>家<rt>いえ</rt></ruby>からA<ruby>駅<rt>えき</rt></ruby>まで<ruby>歩<rt>ある</rt></ruby>いて ${walk}分、A<ruby>駅<rt>えき</rt></ruby>からB<ruby>駅<rt>えき</rt></ruby>まで<ruby>電車<rt>でんしゃ</rt></ruby>で ${ride}分かかります。<br>何時何分にB<ruby>駅<rt>えき</rt></ruby>に<ruby>着<rt>つ</rt></ruby>きますか。`, ans, op:"add", base:now, delta:totalDelta, walk, ride };
+    return {
+      level, q:`<ruby>今<rt>いま</rt></ruby> ${jHL(now)}です。<ruby>家<rt>いえ</rt></ruby>からA<ruby>駅<rt>えき</rt></ruby>まで<ruby>歩<rt>ある</rt></ruby>いて ${walk}分、A<ruby>駅<rt>えき</rt></ruby>からB<ruby>駅<rt>えき</rt></ruby>まで<ruby>電車<rt>でんしゃ</rt></ruby>で ${ride}分かかります。<br>何時何分にB<ruby>駅<rt>えき</rt></ruby>に<ruby>着<rt>つ</rt></ruby>きますか。`,
+      ans, op:"add", base:now, delta:totalDelta, walk, ride,
+      anim:{ start:now, segs:[{kind:"walk",from:"家",to:"A駅",dur:walk},{kind:"train",from:"A駅",to:"B駅",dur:ride}], knownIdx:0, knownTime:now, reverse:false, ans }
+    };
   }
 }
 
 /* ============================================================
    4たくの ダミー生成
-   ・基本: 正解から±5/±10/±15分ずらす(5分きざみ、重複なし)
-   ・4つのうち すくなくとも1つは「よくある間違い」パターンから作る
-     - パターンA: 分はそのまま、時だけ±1ずれる(時をまたぐ計算の間違い)
-     - パターンB: 時はそのまま、分だけ55分ずれる(繰り上がり/繰り下がりを忘れる。
-       例: 7時50分+20分を「7時70分」と考えて分だけ書こうとし、結果70-60=10分だが
-       時を繰り上げず7時10分としてしまう、のような間違いを模す)
 ============================================================ */
-/* 「よくある間違い」を、実際の計算間違いとして再現する。
-   raw = { op:'add'|'sub', base, delta } を使い、
-   ・繰り上がり/繰り下がり忘れ(分だけ60で折り返し、時をそのままにする間違い)
-   ・時だけ±1ずれる(時と分の計算を取り違える間違い)
-   の2種類を候補として返す。 */
 function commonMistakes(raw){
   const out=[];
   if(raw){
@@ -442,7 +454,6 @@ function commonMistakes(raw){
     const carryMistake = norm(b.h*60 + wrongMm);
     out.push(carryMistake);
   }
-  // 時だけ±1ずれる間違い(分はそのまま正しい)
   const t=fmt(raw ? (raw.op==="add" ? raw.base+raw.delta : raw.base-raw.delta) : 0);
   out.push(norm(t.h*60 + t.mm + 60));
   out.push(norm(t.h*60 + t.mm - 60));
@@ -453,14 +464,12 @@ function buildChoices(ansMin, raw){
   const used = new Set([ansMin]);
   const opts = [ansMin];
 
-  // よくある間違いパターンから最低1つ採用
   const mistakes = commonMistakes(raw).filter(v=> !used.has(v));
   if(mistakes.length){
     const pick = choice(mistakes);
     opts.push(pick); used.add(pick);
   }
 
-  // 残りはランダムなずれ(±5/±10/±15分)で埋める、5分きざみ・重複なし
   const deltas = [5,-5,10,-10,15,-15,20,-20];
   let guard=0;
   while(opts.length<4 && guard<40){
@@ -469,7 +478,6 @@ function buildChoices(ansMin, raw){
     const v = norm(ansMin + d);
     if(!used.has(v)){ opts.push(v); used.add(v); }
   }
-  // 万一足りない場合の保険
   let extra=25;
   while(opts.length<4 && guard<80){
     guard++;
@@ -478,7 +486,6 @@ function buildChoices(ansMin, raw){
     extra+=5;
   }
 
-  // シャッフル
   for(let i=opts.length-1;i>0;i--){
     const j=Math.floor(Math.random()*(i+1));
     [opts[i],opts[j]]=[opts[j],opts[i]];
@@ -491,9 +498,10 @@ function buildChoices(ansMin, raw){
 ============================================================ */
 const state = {
   settings:{ levels:[1], diff:"easy", direction:"random", mode:"choice", count:4 },
-  problems:[],   // { level, q, ansH, ansM, choices:[{h,m,correct}]|null, _wrongCount }
+  problems:[],   // { level, q, ansH, ansM, choices, op, base, delta, walk, ride, anim }
   tab:"problem", // problem | answer
 };
+const present = { idx:0 };
 
 /* ============================================================
    せってい画面
@@ -555,7 +563,11 @@ function generateProblems(){
   for(let i=0;i<n;i++){
     const raw = makeRawProblem(choice(levels), state.settings);
     const t=fmt(raw.ans);
-    const prob = { level:raw.level, q:raw.q, ansH:t.h, ansM:t.mm, choices:null, op:raw.op, base:raw.base, delta:raw.delta, walk:raw.walk, ride:raw.ride };
+    const prob = {
+      level:raw.level, q:raw.q, ansH:t.h, ansM:t.mm, choices:null,
+      op:raw.op, base:raw.base, delta:raw.delta, walk:raw.walk, ride:raw.ride,
+      anim:raw.anim,
+    };
     if(state.settings.mode==="choice"){
       prob.choices = buildChoices(raw.ans, raw);
     }
@@ -601,7 +613,8 @@ function renderProblemList(){
         <span class="mini-lbl">時</span>
         <input class="mini-num" type="number" data-i="${i}" data-f="ansM" value="${p.ansM}" min="0" max="55" step="5">
         <span class="mini-lbl">分</span>
-      </div>`;
+      </div>
+      <p class="ans-note">※発表モードのアニメは自動作成時の数字で動きます。正答をここで書きかえても、アニメの答えは変わりません。</p>`;
     if(p.choices){
       html+=`<div class="choice-edit" data-i="${i}">`;
       p.choices.forEach((c,ci)=>{
@@ -613,10 +626,7 @@ function renderProblemList(){
       });
       html+=`</div>`;
     }
-    html+=`
-      <button class="reveal-btn" data-i="${i}" data-act="anim">アニメで見る</button>
-      <div style="text-align:right;"><button class="del-btn" data-i="${i}" data-act="del">この問題を削除</button></div>
-    `;
+    html+=`<div style="text-align:right; margin-top:6px;"><button class="del-btn" data-i="${i}" data-act="del">この問題を削除</button></div>`;
     card.innerHTML=html;
     box.appendChild(card);
   });
@@ -624,9 +634,6 @@ function renderProblemList(){
 }
 
 function stripTagsForEdit(html){
-  // ruby表記を平文に戻して編集しやすくする(保存時に再度ふりがな化はしない簡易版:
-  // 編集後はふりがななし平文として扱う。既存のふりがなは温存したい場合は
-  // 「文章はそのまま」を選べるよう、まずはHTMLのタグ除去のみ行う)
   return html.replace(/<rt>.*?<\/rt>/g,"").replace(/<\/?ruby>/g,"").replace(/<br\s*\/?>/g,"\n").replace(/<\/?b>/g,"");
 }
 
@@ -672,12 +679,6 @@ function bindProblemEvents(){
       renderProblemList();
     });
   });
-  document.querySelectorAll("[data-act='anim']").forEach(el=>{
-    el.addEventListener("click",()=>{
-      const i=parseInt(el.dataset.i);
-      openAnimModal(state.problems[i]);
-    });
-  });
 }
 
 /* ============================================================
@@ -686,17 +687,13 @@ function bindProblemEvents(){
 function escapeHtml(s){
   return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 }
-/* 分が0のときは「分」を省略して「8時」のように表す(印刷HTML用) */
 function jPrintTime(h,m){ return m===0 ? `${h}時` : `${h}時${m}分`; }
 
 function qToPrintHtml(rawQ){
-  // 保存時に平文へ変換済みの可能性があるため、改行(\n)を<br>に、
-  // すでにHTML(<br>や<ruby>含む)ならそのまま尊重する簡易判定
   if(/<br\s*\/?>|<ruby>/.test(rawQ)) return rawQ;
   return escapeHtml(rawQ).replace(/\n/g,"<br>");
 }
 
-/* 名前欄には横線をつけない(名前だけ書く枠) */
 function buildSheetItemsHtml(mode){
   const showAnswer = mode==="answer";
   return state.problems.map((p,i)=>{
@@ -721,30 +718,42 @@ function buildSheetItemsHtml(mode){
   }).join("\n");
 }
 
+/* ダウンロード用HTMLに埋め込む問題データ(発表モード用)。
+   qとansのみ(選択肢は解答アニメには不要)を軽量なJSONにする。 */
+function buildAnimDataJson(){
+  return JSON.stringify(state.problems.map(p=>({ q:p.q, anim:p.anim })));
+}
+
 function buildPrintHtml(mode){
-  // mode: 'problem' | 'answer'
   const showAnswer = mode==="answer";
   const title = showAnswer ? "なんじにでるかな？　解答プリント" : "なんじにでるかな？";
   const items = buildSheetItemsHtml(mode);
+  const animDataJson = buildAnimDataJson();
 
   return `<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>${title}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=BIZ+UDMincho&display=swap" rel="stylesheet">
 <style>
-  *{ box-sizing:border-box; }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body{ margin:0; padding:0; }
   body{
     font-family:"BIZ UDPGothic", sans-serif;
     color:#000;
     background:#e9e9e9;
-    margin:0; padding:20px;
+    padding:20px;
+    touch-action:manipulation;
   }
   ruby rt{ font-size:.6em; }
+  .screen{ display:none; }
+  .screen.active{ display:block; }
+
+  /* --- 印刷画面 --- */
   .sheet{
     background:#fff;
     width:210mm;
@@ -778,27 +787,423 @@ function buildPrintHtml(mode){
   .choice{ padding:2px 4px; }
   .choice.correct{ font-weight:700; text-decoration:underline; }
 
-  .print-bar{ text-align:center; margin:16px auto; max-width:210mm; }
-  .print-bar button{
+  .top-bar{ display:flex; justify-content:center; gap:12px; align-items:center; margin:0 auto 16px; max-width:210mm; flex-wrap:wrap; }
+  .top-bar button{
     font-family:"BIZ UDPGothic", sans-serif; font-size:15px; font-weight:700;
-    padding:10px 22px; border-radius:10px; border:none; background:#3f8cd6; color:#fff; cursor:pointer;
+    min-height:44px; padding:0 22px; border-radius:10px; border:none; cursor:pointer;
   }
+  .top-bar .b-print{ background:#3f8cd6; color:#fff; }
+  .top-bar .b-anim{ background:#fff; color:#3f8cd6; border:2px solid #cfe0f0 !important; }
 
   @media print{
     body{ background:#fff; padding:0; }
     .sheet{ box-shadow:none; margin:0; width:auto; min-height:0; }
-    .print-bar{ display:none; }
+    .top-bar{ display:none; }
     @page{ size:A4; margin:0; }
   }
+
+  /* --- 解答アニメ画面(みんなで考える方式) --- */
+  #screen-anim, #screen-anim-result{ max-width:1100px; margin:0 auto; }
+  .anim-topbar{ display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+  .anim-home-btn{ min-height:44px; padding:0 14px; font-size:15px; background:#fff; color:#3f8cd6; border:2px solid #cfe0f0; border-radius:12px; cursor:pointer; }
+  .anim-progress{ text-align:center; color:#5a6b7b; font-size:15px; margin-bottom:6px; }
+  .anim-card{ background:#fff; border-radius:18px; padding:14px 20px; box-shadow:0 4px 14px rgba(46,90,140,.12); margin-bottom:12px; }
+  .anim-question{ font-size:23px; text-align:center; margin:2px 4px 10px; color:#2b3a4a; }
+  .anim-question b{ color:#2f6fae; }
+
+  .qanim-wrap{ text-align:center; margin:4px 0; }
+  .qanim-wrap canvas{ width:100%; max-width:900px; height:auto; background:#eef5fb; border-radius:18px; display:block; margin:0 auto; box-shadow:0 6px 20px rgba(46,90,140,.16); }
+  .qanim-controls{ display:flex; align-items:center; gap:10px; max-width:900px; margin:12px auto 4px; }
+  .qanim-playbtn{ width:48px; height:48px; min-width:48px; border-radius:50%; background:#dceefc; color:#2f6fae; font-size:18px; border:none; flex:0 0 auto; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+  .qanim-playbtn.active{ background:#3f8cd6; color:#fff; }
+  .qanim-range{ flex:1; height:48px; -webkit-appearance:none; appearance:none; background:transparent; touch-action:pan-x; }
+  .qanim-range::-webkit-slider-runnable-track{ height:8px; border-radius:8px; background:#dceefc; }
+  .qanim-range::-webkit-slider-thumb{ -webkit-appearance:none; width:28px; height:28px; margin-top:-10px; border-radius:50%; background:#dceefc; border:3px solid #3f8cd6; box-shadow:0 1px 4px rgba(0,0,0,.2); }
+  .qanim-range::-moz-range-track{ height:8px; border-radius:8px; background:#dceefc; }
+  .qanim-range::-moz-range-thumb{ width:28px; height:28px; border-radius:50%; background:#dceefc; border:3px solid #3f8cd6; box-shadow:0 1px 4px rgba(0,0,0,.2); }
+
+  .anim-feedback{ text-align:center; font-size:22px; font-weight:700; min-height:30px; margin:10px 0 2px; color:#369268; }
+  .anim-btn-row{ display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-top:10px; }
+  .anim-btn-row button{
+    font-family:"BIZ UDPGothic", sans-serif; min-height:44px; padding:0 20px; font-size:16px; font-weight:700;
+    background:#fff; color:#3f8cd6; border:2px solid #cfe0f0; border-radius:14px; cursor:pointer;
+  }
+  .anim-btn-row button:disabled{ opacity:.45; }
+
+  .anim-result-big{ font-size:26px; text-align:center; font-weight:700; color:#2f6fae; margin:16px 0; }
 </style>
 </head>
 <body>
-  <div class="print-bar"><button onclick="window.print()">この プリントを 印刷する</button></div>
-  <div class="sheet">
-    <div class="headline">${title}</div>
-    <div class="name-row"><span class="lbl">名前</span><span class="paren">（　　　　　　　　　　　　　）</span></div>
-    ${items}
-  </div>
+
+  <!-- 印刷画面 -->
+  <section id="screen-print" class="screen active">
+    <div class="top-bar">
+      <button class="b-print" onclick="window.print()">この プリントを 印刷する</button>
+      <button class="b-anim" id="btn-goto-anim">解答アニメを見る</button>
+    </div>
+    <div class="sheet">
+      <div class="headline">${title}</div>
+      <div class="name-row"><span class="lbl">名前</span><span class="paren">（　　　　　　　　　　　　　）</span></div>
+      ${items}
+    </div>
+  </section>
+
+  <!-- 解答アニメ画面 -->
+  <section id="screen-anim" class="screen">
+    <div class="anim-topbar">
+      <button class="anim-home-btn" id="btn-anim-exit">← 印刷画面にもどる</button>
+      <div class="anim-progress" id="anim-progress"></div>
+    </div>
+    <div class="anim-card">
+      <div class="anim-question" id="anim-question"></div>
+      <div id="anim-slot" class="qanim-wrap"></div>
+      <div class="anim-feedback" id="anim-feedback"></div>
+      <div class="anim-btn-row" id="anim-btn-row"></div>
+    </div>
+  </section>
+
+  <!-- 解答アニメ:終了画面 -->
+  <section id="screen-anim-result" class="screen">
+    <div class="anim-card">
+      <div class="anim-result-big">みんな　よく　考えたね！</div>
+      <div class="anim-btn-row">
+        <button id="btn-anim-again">もう一度みる</button>
+        <button id="btn-anim-back">印刷画面にもどる</button>
+      </div>
+    </div>
+  </section>
+
+<scr${''}ipt>
+"use strict";
+const ANIM_DATA = ${animDataJson};
+
+function fmt(m){ m=((m%1440)+1440)%1440; return {h:Math.floor(m/60), mm:m%60}; }
+function jPlain(m){ const t=fmt(m); return t.mm===0 ? \`\${t.h}時\` : \`\${t.h}時\${t.mm}分\`; }
+
+function showScreen(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  window.scrollTo(0,0);
+}
+
+/* ============================================================
+   解答アニメ(「みんなで考える」と同じ体験)
+============================================================ */
+const qa = { idx:0 };
+
+function startAnim(){
+  qa.idx=0;
+  showScreen("screen-anim");
+  renderAnimQuestion();
+}
+function renderAnimQuestion(){
+  const p=ANIM_DATA[qa.idx];
+  document.getElementById("anim-progress").textContent = \`問題 \${qa.idx+1} / \${ANIM_DATA.length}\`;
+  document.getElementById("anim-question").innerHTML=p.q;
+  document.getElementById("anim-feedback").textContent="";
+
+  const slot=document.getElementById("anim-slot");
+  slot.innerHTML=\`
+    <canvas id="qanim-canvas" width="900" height="260"></canvas>
+    <div class="qanim-controls">
+      <button class="qanim-playbtn" id="qanim-back">◁</button>
+      <input type="range" id="qanim-scrub" class="qanim-range" min="0" max="1000" value="0">
+      <button class="qanim-playbtn" id="qanim-fwd">▷</button>
+    </div>\`;
+  setupQAnim(p.anim);
+
+  const row=document.getElementById("anim-btn-row");
+  row.innerHTML=\`
+    <button id="btn-anim-reveal">答えを見る</button>
+    <button id="btn-anim-next">次へ</button>\`;
+  document.getElementById("btn-anim-reveal").addEventListener("click", revealQAnim);
+  document.getElementById("btn-anim-next").addEventListener("click", nextQAnim);
+}
+function revealQAnim(){
+  const p=ANIM_DATA[qa.idx];
+  qanim.revealed=true;
+  document.getElementById("anim-feedback").innerHTML = \`答えは <b>\${jPlain(p.anim.ans)}</b> だよ\`;
+  document.getElementById("btn-anim-reveal").disabled=true;
+  renderQAnimFrame();
+}
+function nextQAnim(){
+  if(qa.idx < ANIM_DATA.length-1){ qa.idx++; renderAnimQuestion(); }
+  else{ stopQAnim(); showScreen("screen-anim-result"); }
+}
+
+/* --- アニメーション本体(2D Canvas / デルタタイム方式) --- */
+let qanimId=null;
+const qanim = { playing:false, dir:1, progress:0, total:0, durSec:6, lastTs:null, spec:null, revealed:false };
+const EDGE_EPS = 0.001;
+
+function stopQAnim(){
+  qanim.playing=false; qanim.lastTs=null;
+  if(qanimId){ cancelAnimationFrame(qanimId); qanimId=null; }
+}
+function setupQAnim(spec){
+  stopQAnim();
+  qanim.spec=spec;
+  const total=spec.segs.reduce((a,s)=>a+s.dur,0);
+  qanim.total=total;
+  qanim.durSec=Math.max(5, Math.min(10, total*0.4));
+  qanim.progress=0; qanim.playing=false; qanim.lastTs=null; qanim.dir=1; qanim.revealed=false;
+
+  const scrub=document.getElementById("qanim-scrub");
+  scrub.value=0;
+  scrub.oninput=(e)=>{
+    stopQAnimPlaying();
+    qanim.progress=parseInt(e.target.value)/1000;
+    renderQAnimFrame();
+  };
+  document.getElementById("qanim-fwd").onclick=()=> toggleQAnimDir(1);
+  document.getElementById("qanim-back").onclick=()=> toggleQAnimDir(-1);
+  updateQAnimButtons();
+  renderQAnimFrame();
+}
+function toggleQAnimDir(dir){
+  const atEnd = qanim.progress >= 1-EDGE_EPS;
+  const atStart = qanim.progress <= EDGE_EPS;
+  if(qanim.playing && qanim.dir===dir){ stopQAnimPlaying(); return; }
+  if(dir===1 && atEnd){
+    qanim.progress=0;
+    const scrub=document.getElementById("qanim-scrub"); if(scrub) scrub.value=0;
+    renderQAnimFrame();
+  }
+  if(dir===-1 && atStart){
+    qanim.progress=1;
+    const scrub=document.getElementById("qanim-scrub"); if(scrub) scrub.value=1000;
+    renderQAnimFrame();
+  }
+  startQAnimPlaying(dir);
+}
+function stopQAnimPlaying(){
+  qanim.playing=false;
+  if(qanimId){ cancelAnimationFrame(qanimId); qanimId=null; }
+  updateQAnimButtons();
+}
+function startQAnimPlaying(dir){
+  qanim.dir=dir; qanim.playing=true; qanim.lastTs=null;
+  updateQAnimButtons();
+  qanimId=requestAnimationFrame(qanimStep);
+}
+function updateQAnimButtons(){
+  const fwdBtn=document.getElementById("qanim-fwd");
+  const backBtn=document.getElementById("qanim-back");
+  if(!fwdBtn || !backBtn) return;
+  const fwdOn = qanim.playing && qanim.dir===1;
+  const backOn = qanim.playing && qanim.dir===-1;
+  fwdBtn.classList.toggle("active", fwdOn);
+  backBtn.classList.toggle("active", backOn);
+  fwdBtn.textContent = fwdOn ? "❚❚" : "▷";
+  backBtn.textContent = backOn ? "❚❚" : "◁";
+}
+function qanimStep(ts){
+  if(!qanim.playing) return;
+  if(qanim.lastTs===null) qanim.lastTs=ts;
+  const dt=(ts-qanim.lastTs)/1000; qanim.lastTs=ts;
+  qanim.progress += (dt/qanim.durSec) * qanim.dir;
+  if(qanim.dir>0 && qanim.progress>=1-EDGE_EPS){ qanim.progress=1; stopQAnimPlaying(); }
+  else if(qanim.dir<0 && qanim.progress<=EDGE_EPS){ qanim.progress=0; stopQAnimPlaying(); }
+  const scrub=document.getElementById("qanim-scrub");
+  if(scrub) scrub.value=Math.round(qanim.progress*1000);
+  renderQAnimFrame();
+  if(qanim.playing) qanimId=requestAnimationFrame(qanimStep);
+  else qanimId=null;
+}
+function renderQAnimFrame(){
+  const spec=qanim.spec;
+  if(!spec) return;
+  const curMin=spec.start + qanim.total*qanim.progress;
+  drawQAnimScene(spec, curMin, qanim.progress, qanim.revealed);
+}
+
+function drawQAnimScene(spec, curMin, progress, revealed){
+  const c=document.getElementById("qanim-canvas");
+  if(!c) return;
+  const ctx=c.getContext("2d");
+  const W=c.width, H=c.height;
+  ctx.clearRect(0,0,W,H);
+
+  const groundY=H-70;
+  ctx.fillStyle="#dbe9f4"; ctx.fillRect(0,groundY,W-210,H-groundY);
+  ctx.strokeStyle="#b9d0e4"; ctx.lineWidth=3;
+  ctx.beginPath(); ctx.moveTo(0,groundY); ctx.lineTo(W-210,groundY); ctx.stroke();
+
+  drawQAnimPath(ctx, spec, progress, curMin, W, H, groundY);
+
+  if(revealed) drawQAnimClock(ctx, W-105, 92, 62, curMin);
+  else drawQAnimStopwatch(ctx, W-105, 92, 62, progress, spec.segs.reduce((a,s)=>a+s.dur,0));
+}
+
+function drawQAnimPath(ctx, spec, progress, curMin, W, H, groundY){
+  const trackLeft=90, trackRight=W-280;
+  const segs=spec.segs;
+  const totalDur=segs.reduce((a,s)=>a+s.dur,0);
+
+  const points=[segs[0].from];
+  segs.forEach(s=>points.push(s.to));
+  const xs=[trackLeft];
+  let acc=0;
+  segs.forEach(s=>{ acc+=s.dur; xs.push(trackLeft + (trackRight-trackLeft)*(acc/totalDur)); });
+
+  for(let i=0;i<points.length;i++){
+    const x=xs[i];
+    if(points[i]==="家") drawQAnimHouse(ctx,x,groundY);
+    else drawQAnimStation(ctx,x,groundY);
+    ctx.fillStyle="#2b3a4a"; ctx.font="24px 'BIZ UDPGothic'"; ctx.textAlign="center";
+    ctx.fillText(points[i], x, groundY+46);
+    if(spec.knownIdx===i){
+      ctx.fillStyle="#2f6fae"; ctx.font="bold 21px 'BIZ UDPGothic'";
+      ctx.fillText(jPlain(spec.knownTime), x, groundY-78);
+    }
+  }
+
+  segs.forEach((s,i)=>{
+    const midX=(xs[i]+xs[i+1])/2;
+    ctx.fillStyle="#5a6b7b"; ctx.font="bold 20px 'BIZ UDPGothic'"; ctx.textAlign="center";
+    ctx.fillText(\`\${s.dur}分\`, midX, groundY-82);
+  });
+
+  let px=trackLeft, kind="walk";
+  {
+    let moved=progress*totalDur;
+    let a=0;
+    for(let i=0;i<segs.length;i++){
+      if(moved<=a+segs[i].dur || i===segs.length-1){
+        const r=Math.min(1,Math.max(0,(moved-a)/segs[i].dur));
+        px = xs[i] + (xs[i+1]-xs[i])*r;
+        kind=segs[i].kind;
+        break;
+      }
+      a+=segs[i].dur;
+    }
+  }
+  if(kind==="walk") drawQAnimPerson(ctx,px,groundY,curMin);
+  else drawQAnimTrain(ctx,px,groundY);
+}
+
+function drawQAnimHouse(ctx,x,gy){
+  ctx.fillStyle="#f3b46b"; ctx.strokeStyle="#c98a3f"; ctx.lineWidth=3;
+  ctx.fillRect(x-26,gy-48,52,48); ctx.strokeRect(x-26,gy-48,52,48);
+  ctx.beginPath(); ctx.moveTo(x-32,gy-48); ctx.lineTo(x,gy-74); ctx.lineTo(x+32,gy-48); ctx.closePath();
+  ctx.fillStyle="#e07a5f"; ctx.fill();
+  ctx.fillStyle="#8b5e34"; ctx.fillRect(x-8,gy-29,16,29);
+}
+function drawQAnimStation(ctx,x,gy){
+  ctx.fillStyle="#8fb8de"; ctx.strokeStyle="#5f8fc0"; ctx.lineWidth=3;
+  ctx.fillRect(x-32,gy-54,64,54); ctx.strokeRect(x-32,gy-54,64,54);
+  ctx.fillStyle="#fff";
+  for(let i=0;i<2;i++)for(let j=0;j<2;j++) ctx.fillRect(x-21+i*26, gy-45+j*21, 16, 14);
+}
+function drawQAnimPerson(ctx,x,gy,curMin){
+  const bob=Math.sin(curMin*3)*3;
+  ctx.fillStyle="#3f8cd6";
+  ctx.beginPath(); ctx.arc(x,gy-48+bob,11,0,7); ctx.fill();
+  ctx.fillRect(x-8,gy-38+bob,16,26);
+  ctx.strokeStyle="#3f8cd6"; ctx.lineWidth=5;
+  const sw=Math.sin(curMin*4)*8;
+  ctx.beginPath(); ctx.moveTo(x-3,gy-12+bob); ctx.lineTo(x-6-sw,gy+bob);
+  ctx.moveTo(x+3,gy-12+bob); ctx.lineTo(x+6+sw,gy+bob); ctx.stroke();
+}
+function drawQAnimTrainBody(ctx,x,gy,w,h){
+  const y=gy-h;
+  ctx.fillStyle="#ff9f5a"; ctx.strokeStyle="#f0873a"; ctx.lineWidth=3;
+  ctx.beginPath();
+  ctx.moveTo(x-w/2, y+h);
+  ctx.lineTo(x-w/2, y+8);
+  ctx.quadraticCurveTo(x-w/2, y, x-w/2+11, y);
+  ctx.lineTo(x+w/2-17, y);
+  ctx.quadraticCurveTo(x+w/2, y, x+w/2, y+14);
+  ctx.lineTo(x+w/2, y+h);
+  ctx.closePath();
+  ctx.fill(); ctx.stroke();
+
+  ctx.fillStyle="#2f6fae";
+  ctx.fillRect(x-w/2, y+h*0.58, w, 6);
+
+  ctx.strokeStyle="#5a6b7b"; ctx.lineWidth=3; ctx.lineCap="round";
+  ctx.beginPath();
+  ctx.moveTo(x-9,y); ctx.lineTo(x-6,y-12); ctx.lineTo(x+6,y-12); ctx.lineTo(x+9,y);
+  ctx.stroke();
+  return y;
+}
+function drawQAnimTrainDoors(ctx,x,y,h,doorOpen,offset,doorW){
+  drawQAnimOneDoor(ctx,x-offset,y,h,doorOpen,doorW);
+  drawQAnimOneDoor(ctx,x+offset,y,h,doorOpen,doorW);
+}
+function drawQAnimOneDoor(ctx,cx,y,h,doorOpen,doorW){
+  const doorH=h-9;
+  const gapX=cx-doorW/2, gapY=y+5;
+  ctx.fillStyle="#3b4a5a";
+  ctx.fillRect(gapX,gapY,doorW,doorH);
+  const panelW=doorW/2;
+  const slide=panelW*0.9*doorOpen;
+  ctx.fillStyle="#dbe7f0"; ctx.strokeStyle="#17324d"; ctx.lineWidth=2;
+  ctx.fillRect(gapX-slide, gapY, panelW, doorH); ctx.strokeRect(gapX-slide, gapY, panelW, doorH);
+  ctx.fillRect(gapX+panelW+slide, gapY, panelW, doorH); ctx.strokeRect(gapX+panelW+slide, gapY, panelW, doorH);
+}
+function drawQAnimTrain(ctx,x,gy){
+  const w=100,h=42;
+  const y=drawQAnimTrainBody(ctx,x,gy,w,h);
+  ctx.fillStyle="#eaf3fb";
+  ctx.fillRect(x-14,y+9,13,13);
+  ctx.fillRect(x+1,y+9,13,13);
+  ctx.fillRect(x-47,y+9,13,13);
+  ctx.fillRect(x+34,y+9,13,13);
+  drawQAnimTrainDoors(ctx,x,y,h,0,25,19);
+}
+function drawQAnimClock(ctx,cx,cy,r,curMin){
+  ctx.fillStyle="#fff"; ctx.strokeStyle="#3f8cd6"; ctx.lineWidth=4;
+  ctx.beginPath(); ctx.arc(cx,cy,r,0,7); ctx.fill(); ctx.stroke();
+  ctx.strokeStyle="#9fb8cf"; ctx.lineWidth=3;
+  for(let i=0;i<12;i++){
+    const a=i*Math.PI/6;
+    ctx.beginPath();
+    ctx.moveTo(cx+Math.sin(a)*(r-6), cy-Math.cos(a)*(r-6));
+    ctx.lineTo(cx+Math.sin(a)*(r-14), cy-Math.cos(a)*(r-14));
+    ctx.stroke();
+  }
+  const t=fmt(curMin);
+  const mA=(t.mm/60)*2*Math.PI;
+  const hA=(((t.h%12)+t.mm/60)/12)*2*Math.PI;
+  ctx.strokeStyle="#2b3a4a"; ctx.lineWidth=6; ctx.lineCap="round";
+  ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx+Math.sin(hA)*(r*0.5), cy-Math.cos(hA)*(r*0.5)); ctx.stroke();
+  ctx.strokeStyle="#3f8cd6"; ctx.lineWidth=5;
+  ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx+Math.sin(mA)*(r*0.72), cy-Math.cos(mA)*(r*0.72)); ctx.stroke();
+  ctx.fillStyle="#2b3a4a"; ctx.beginPath(); ctx.arc(cx,cy,5,0,7); ctx.fill();
+  ctx.fillStyle="#2b3a4a"; ctx.font="bold 22px 'BIZ UDPGothic'"; ctx.textAlign="center";
+  ctx.fillText(jPlain(Math.round(curMin)), cx, cy+r+34);
+}
+function drawQAnimStopwatch(ctx,cx,cy,r,progress,total){
+  ctx.fillStyle="#fff"; ctx.strokeStyle="#ff9f5a"; ctx.lineWidth=5;
+  ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill(); ctx.stroke();
+  ctx.fillStyle="#ff9f5a"; ctx.fillRect(cx-9,cy-r-14,18,15);
+
+  const angle = -Math.PI/2 + Math.PI*2*Math.max(0,Math.min(1,progress));
+  ctx.strokeStyle="#3f8cd6"; ctx.lineWidth=6; ctx.lineCap="round";
+  ctx.beginPath();
+  ctx.moveTo(cx,cy);
+  ctx.lineTo(cx+Math.cos(angle)*(r*0.68), cy+Math.sin(angle)*(r*0.68));
+  ctx.stroke();
+  ctx.fillStyle="#2b3a4a"; ctx.beginPath(); ctx.arc(cx,cy,5,0,7); ctx.fill();
+
+  ctx.fillStyle="#2b3a4a"; ctx.font="bold 22px 'BIZ UDPGothic'"; ctx.textAlign="center";
+  ctx.fillText(\`\${Math.round(total*Math.max(0,Math.min(1,progress)))}ふん\`, cx, cy+r+34);
+}
+
+document.getElementById("btn-goto-anim").addEventListener("click", startAnim);
+document.getElementById("btn-anim-exit").addEventListener("click",()=>{ stopQAnim(); showScreen("screen-print"); });
+document.getElementById("btn-anim-again").addEventListener("click", startAnim);
+document.getElementById("btn-anim-back").addEventListener("click",()=>{ showScreen("screen-print"); });
+
+let lastTouch=0;
+document.addEventListener("touchend",e=>{
+  const now=Date.now();
+  if(now-lastTouch<=300){ e.preventDefault(); }
+  lastTouch=now;
+},{passive:false});
+document.addEventListener("gesturestart",e=>{ e.preventDefault(); });
+<\/scr${''}ipt>
 </body>
 </html>`;
 }
@@ -875,244 +1280,183 @@ function initHelp(){
 }
 
 /* ============================================================
-   アニメーション(2D Canvas)
-   ・「なんじにでるかな？」本編の描画ロジックを移植
-   ・プリントの問題データ(op/base/delta/walk/ride)から初期値を組み立てる
-   ・モーダル内で歩く時間・電車時間・今の時刻を△▽＋直接入力で
-     いじって、その場でアニメを作り直せる
+   発表モード(「みんなで考える」と同じ体験)
+   ・state.problems(先生が編集した問題)を、1問ずつ全画面で発表
+   ・答えを見るまでは時刻を隠し、ストップウォッチ(経過時間)を表示
+   ・「答えを見る」で時計表示(時刻)に切りかわる
+   ・「次へ」で次の問題へ。最後まで行くと終了画面(ねぎらいのみ)
 ============================================================ */
-const animEdit = {
-  kind:null,      // "walk" | "ride" | "walkride"
-  reverse:false,  // true = 到着時刻がわかっていて出発時刻を求める(巻き戻し)
-  now:0,          // 分かっている時刻(0-1439)
-  walk:10,
-  ride:20,
-};
-const animRun = { playing:false, total:0, durSec:6, progress:0, lastTs:null };
-let animId=null;
-let pendingPlayTimeout=null;
-let animCurrentProblem=null;
-
-function stopAnimAll(){
-  animRun.playing=false; animRun.lastTs=null;
-  if(animId){ cancelAnimationFrame(animId); animId=null; }
-  if(pendingPlayTimeout){ clearTimeout(pendingPlayTimeout); pendingPlayTimeout=null; }
+function startPresent(){
+  if(state.problems.length===0){ alert("先に問題を作ってね"); return; }
+  present.idx=0;
+  show("screen-present");
+  renderPresentQuestion();
 }
 
-/* 問題データから、アニメ編集用の初期値をつくる */
-function buildAnimEditFromProblem(p){
-  const isReverse = p.op==="sub"; // sub: 到着(base)が分かっていて出発を求める→巻き戻し
-  if(p.level===1){
-    return { kind:"walk", reverse:isReverse, now:p.base, walk:p.delta, ride:20 };
-  }
-  if(p.level===2){
-    return { kind:"ride", reverse:isReverse, now:p.base, walk:10, ride:p.delta };
-  }
-  // level 5
-  const walk = p.walk!=null ? p.walk : Math.round(p.delta/2/5)*5;
-  const ride = p.ride!=null ? p.ride : (p.delta-walk);
-  return { kind:"walkride", reverse:isReverse, now:p.base, walk, ride };
+function renderPresentQuestion(){
+  const p=state.problems[present.idx];
+
+  document.getElementById("present-progress").innerHTML=`問題 ${present.idx+1} / ${state.problems.length}`;
+  document.getElementById("present-question").innerHTML=p.q;
+  document.getElementById("present-feedback").textContent="";
+
+  const aslot=document.getElementById("present-anim-slot");
+  aslot.innerHTML=`
+    <canvas id="panim-canvas" width="900" height="260"></canvas>
+    <div class="panim-controls">
+      <button class="panim-playbtn" id="panim-back">◁</button>
+      <input type="range" id="panim-scrub" class="panim-range" min="0" max="1000" value="0">
+      <button class="panim-playbtn" id="panim-fwd">▷</button>
+    </div>`;
+  setupPresentAnim(p.anim);
+
+  buildPresentButtons();
 }
 
-/* いまの animEdit から、アニメ用の segs(区間)を組み立てる。
-   reverse=false: now が出発、そこから+方向に進む
-   reverse=true : now が到着、そこから-方向に巻き戻る(表示は開始点から) */
-function buildAnimSpec(){
-  const e=animEdit;
-  let segs=[];
-  if(e.kind==="walk"){
-    segs=[{ kind:"walk", from:"家", to:"駅", dur:e.walk }];
-  }else if(e.kind==="ride"){
-    segs=[{ kind:"train", from:"A駅", to:"B駅", dur:e.ride }];
+function buildPresentButtons(){
+  const row=document.getElementById("present-btn-row");
+  row.innerHTML=`
+    <button class="btn ghost small" id="btn-present-reveal">答えを見る</button>
+    <button class="btn ghost small" id="btn-present-next">次へ</button>`;
+  document.getElementById("btn-present-reveal").addEventListener("click",presentReveal);
+  document.getElementById("btn-present-next").addEventListener("click",presentNext);
+}
+
+function presentReveal(){
+  const p=state.problems[present.idx];
+  presentAnim.revealed=true;
+  const fb=document.getElementById("present-feedback");
+  fb.innerHTML=`答えは <b>${jPlain(p.anim.ans)}</b> だよ`;
+  document.getElementById("btn-present-reveal").disabled=true;
+  renderPresentFrame();
+}
+
+function presentNext(){
+  if(present.idx < state.problems.length-1){
+    present.idx++;
+    renderPresentQuestion();
   }else{
-    segs=[{ kind:"walk", from:"家", to:"A駅", dur:e.walk },{ kind:"train", from:"A駅", to:"B駅", dur:e.ride }];
+    stopPresentAnim();
+    show("screen-present-result");
   }
-  const total = segs.reduce((a,s)=>a+s.dur,0);
-  const start = e.reverse ? norm(e.now-total) : e.now;
-  const knownIdx = e.reverse ? segs.length : 0;
-  const knownTime = e.now;
-  return { start, segs, knownIdx, knownTime, reverse:e.reverse };
 }
 
 /* ============================================================
-   モーダルの ひらきかた・すうじ編集
+   発表モードのアニメーション(2D Canvas)
+   ・1問ずつの表示なので状態はグローバル1つでよい
+   ・requestAnimationFrame はデルタタイム方式(120Hz端末でも同速)
 ============================================================ */
-function openAnimModal(p){
-  animCurrentProblem = p;
-  animEdit_setFromProblem(p);
-  document.getElementById("anim-modal").classList.add("show");
-  renderAnimFields();
-  setupAnimPlayback();
-}
-function animEdit_setFromProblem(p){
-  const e = buildAnimEditFromProblem(p);
-  animEdit.kind=e.kind; animEdit.reverse=e.reverse; animEdit.now=e.now; animEdit.walk=e.walk; animEdit.ride=e.ride;
-}
-function closeAnimModal(){
-  stopAnimAll();
-  document.getElementById("anim-modal").classList.remove("show");
+let presentAnimId=null;
+const presentAnim = { playing:false, dir:1, progress:0, total:0, durSec:6, lastTs:null, spec:null, revealed:false };
+const EDGE_EPS = 0.001;
+
+function stopPresentAnim(){
+  presentAnim.playing=false; presentAnim.lastTs=null;
+  if(presentAnimId){ cancelAnimationFrame(presentAnimId); presentAnimId=null; }
 }
 
-function renderAnimFields(){
-  const box=document.getElementById("anim-fields");
-  const e=animEdit;
-  const nowT=fmt(e.now);
-  let html="";
-  html+=animFieldTimeHtml("now-h","今の時こく(時)",nowT.h,0,23,1);
-  html+=animFieldTimeHtml("now-m","今の時こく(分)",nowT.mm,0,55,5);
-  if(e.kind==="walk" || e.kind==="walkride"){
-    html+=animFieldNumHtml("walk","歩く時間",e.walk,5,60,5,"分");
-  }
-  if(e.kind==="ride" || e.kind==="walkride"){
-    html+=animFieldNumHtml("ride","電車の時間",e.ride,5,90,5,"分");
-  }
-  box.innerHTML=html;
-  bindAnimFieldEvents();
-}
-function animFieldTimeHtml(key,label,val,min,max,step){
-  return `<div class="anim-field" data-key="${key}">
-    <span class="f-lbl">${label}</span>
-    <button class="anim-mini-step" data-act="minus" data-key="${key}">▽</button>
-    <input class="anim-mini-in" type="number" data-key="${key}" value="${val}" min="${min}" max="${max}" step="${step}">
-    <button class="anim-mini-step" data-act="plus" data-key="${key}">△</button>
-  </div>`;
-}
-function animFieldNumHtml(key,label,val,min,max,step,unit){
-  return `<div class="anim-field" data-key="${key}">
-    <span class="f-lbl">${label}</span>
-    <button class="anim-mini-step" data-act="minus" data-key="${key}">▽</button>
-    <input class="anim-mini-in" type="number" data-key="${key}" value="${val}" min="${min}" max="${max}" step="${step}">
-    <button class="anim-mini-step" data-act="plus" data-key="${key}">△</button>
-    <span class="anim-unit">${unit}</span>
-  </div>`;
-}
+function setupPresentAnim(spec){
+  stopPresentAnim();
+  presentAnim.spec=spec;
+  const total=spec.segs.reduce((a,s)=>a+s.dur,0);
+  presentAnim.total=total;
+  presentAnim.durSec=Math.max(5, Math.min(10, total*0.4));
+  presentAnim.progress=0;
+  presentAnim.playing=false; presentAnim.lastTs=null; presentAnim.dir=1;
+  presentAnim.revealed=false;
 
-function bindAnimFieldEvents(){
-  const box=document.getElementById("anim-fields");
-  box.querySelectorAll(".anim-mini-in").forEach(el=>{
-    el.addEventListener("change",()=> applyAnimFieldChange(el.dataset.key, parseInt(el.value)||0));
-  });
-  box.querySelectorAll(".anim-mini-step").forEach(btn=>{
-    btn.addEventListener("click",()=>{
-      const key=btn.dataset.key;
-      const input=box.querySelector(`.anim-mini-in[data-key="${key}"]`);
-      const step=parseInt(input.step)||5;
-      const dir=btn.dataset.act==="plus" ? 1 : -1;
-      applyAnimFieldChange(key, (parseInt(input.value)||0) + dir*step);
-    });
-  });
-}
-function applyAnimFieldChange(key, raw){
-  if(key==="now-h"){
-    let v=Math.max(0,Math.min(23,raw));
-    const t=fmt(animEdit.now);
-    animEdit.now = v*60 + t.mm;
-  }else if(key==="now-m"){
-    let v=Math.max(0,Math.min(55,Math.round(raw/5)*5));
-    const t=fmt(animEdit.now);
-    animEdit.now = t.h*60 + v;
-  }else if(key==="walk"){
-    animEdit.walk = Math.max(5,Math.min(60,Math.round(raw/5)*5));
-  }else if(key==="ride"){
-    animEdit.ride = Math.max(5,Math.min(90,Math.round(raw/5)*5));
-  }
-  renderAnimFields();
-  setupAnimPlayback();
-}
-
-/* ============================================================
-   さいせい せいぎょ
-============================================================ */
-function setupAnimPlayback(){
-  stopAnimAll();
-  const spec = buildAnimSpec();
-  animRun.spec = spec;
-  const total = spec.segs.reduce((a,s)=>a+s.dur,0);
-  animRun.total=total;
-  animRun.durSec=Math.max(5, Math.min(10, total*0.4));
-  animRun.progress=0; animRun.playing=false; animRun.lastTs=null;
-
-  const scrub=document.getElementById("anim-scrub");
-  scrub.value = spec.reverse ? 1000 : 0;
+  const scrub=document.getElementById("panim-scrub");
+  scrub.value=0;
   scrub.oninput=(e)=>{
-    if(pendingPlayTimeout){ clearTimeout(pendingPlayTimeout); pendingPlayTimeout=null; }
-    stopAnimPlaying();
-    const v=parseInt(e.target.value)/1000;
-    animRun.progress = spec.reverse ? (1-v) : v;
-    renderAnimFrame();
+    stopPresentAnimPlaying();
+    presentAnim.progress=parseInt(e.target.value)/1000;
+    renderPresentFrame();
   };
-  const playBtn=document.getElementById("anim-play");
-  playBtn.onclick = toggleAnimPlay;
-  playBtn.textContent="▶";
-  renderAnimFrame();
-}
-function toggleAnimPlay(){
-  if(pendingPlayTimeout){ clearTimeout(pendingPlayTimeout); pendingPlayTimeout=null; }
-  if(animRun.playing) stopAnimPlaying(); else startAnimPlaying();
-}
-function stopAnimPlaying(){
-  animRun.playing=false;
-  const btn=document.getElementById("anim-play"); if(btn) btn.textContent="▶";
-  if(animId){ cancelAnimationFrame(animId); animId=null; }
-}
-function startAnimPlaying(){
-  const spec=animRun.spec;
-  if(animRun.progress>=1){
-    animRun.progress=0;
-    const scrub=document.getElementById("anim-scrub"); if(scrub) scrub.value = spec.reverse ? 1000 : 0;
-    renderAnimFrame();
-  }
-  animRun.playing=true; animRun.lastTs=null;
-  const btn=document.getElementById("anim-play"); if(btn) btn.textContent="❚❚";
-  animId=requestAnimationFrame(animStep);
-}
-function animStep(ts){
-  if(!animRun.playing) return;
-  if(animRun.lastTs===null) animRun.lastTs=ts;
-  const dt=(ts-animRun.lastTs)/1000; animRun.lastTs=ts;
-  animRun.progress += dt/animRun.durSec;
-  if(animRun.progress>=1){
-    animRun.progress=1; animRun.playing=false;
-    const btn=document.getElementById("anim-play"); if(btn) btn.textContent="▶";
-  }
-  const scrub=document.getElementById("anim-scrub");
-  const spec=animRun.spec;
-  if(scrub) scrub.value=Math.round((spec.reverse ? 1-animRun.progress : animRun.progress)*1000);
-  renderAnimFrame();
-  if(animRun.playing) animId=requestAnimationFrame(animStep);
-  else animId=null;
+  document.getElementById("panim-fwd").onclick=()=> togglePresentPlayDir(1);
+  document.getElementById("panim-back").onclick=()=> togglePresentPlayDir(-1);
+  updatePresentPlayButtons();
+  renderPresentFrame();
 }
 
-function renderAnimFrame(){
-  const spec=animRun.spec;
+function togglePresentPlayDir(dir){
+  const atEnd = presentAnim.progress >= 1-EDGE_EPS;
+  const atStart = presentAnim.progress <= EDGE_EPS;
+  if(presentAnim.playing && presentAnim.dir===dir){ stopPresentAnimPlaying(); return; }
+  if(dir===1 && atEnd){
+    presentAnim.progress=0;
+    const scrub=document.getElementById("panim-scrub"); if(scrub) scrub.value=0;
+    renderPresentFrame();
+  }
+  if(dir===-1 && atStart){
+    presentAnim.progress=1;
+    const scrub=document.getElementById("panim-scrub"); if(scrub) scrub.value=1000;
+    renderPresentFrame();
+  }
+  startPresentAnimPlaying(dir);
+}
+function stopPresentAnimPlaying(){
+  presentAnim.playing=false;
+  if(presentAnimId){ cancelAnimationFrame(presentAnimId); presentAnimId=null; }
+  updatePresentPlayButtons();
+}
+function startPresentAnimPlaying(dir){
+  presentAnim.dir=dir; presentAnim.playing=true; presentAnim.lastTs=null;
+  updatePresentPlayButtons();
+  presentAnimId=requestAnimationFrame(presentAnimStep);
+}
+function updatePresentPlayButtons(){
+  const fwdBtn=document.getElementById("panim-fwd");
+  const backBtn=document.getElementById("panim-back");
+  if(!fwdBtn || !backBtn) return;
+  const fwdOn = presentAnim.playing && presentAnim.dir===1;
+  const backOn = presentAnim.playing && presentAnim.dir===-1;
+  fwdBtn.classList.toggle("active", fwdOn);
+  backBtn.classList.toggle("active", backOn);
+  fwdBtn.textContent = fwdOn ? "❚❚" : "▷";
+  backBtn.textContent = backOn ? "❚❚" : "◁";
+}
+function presentAnimStep(ts){
+  if(!presentAnim.playing) return;
+  if(presentAnim.lastTs===null) presentAnim.lastTs=ts;
+  const dt=(ts-presentAnim.lastTs)/1000; presentAnim.lastTs=ts;
+  presentAnim.progress += (dt/presentAnim.durSec) * presentAnim.dir;
+  if(presentAnim.dir>0 && presentAnim.progress>=1-EDGE_EPS){ presentAnim.progress=1; stopPresentAnimPlaying(); }
+  else if(presentAnim.dir<0 && presentAnim.progress<=EDGE_EPS){ presentAnim.progress=0; stopPresentAnimPlaying(); }
+  const scrub=document.getElementById("panim-scrub");
+  if(scrub) scrub.value=Math.round(presentAnim.progress*1000);
+  renderPresentFrame();
+  if(presentAnim.playing) presentAnimId=requestAnimationFrame(presentAnimStep);
+  else presentAnimId=null;
+}
+
+function renderPresentFrame(){
+  const spec=presentAnim.spec;
   if(!spec) return;
-  const effP = spec.reverse ? (1-animRun.progress) : animRun.progress;
-  const curMin = spec.start + animRun.total*effP;
-  const hidePerson = !spec.reverse && animRun.progress<=0;
-  drawScene(spec, curMin, effP, true, hidePerson);
+  const prog=presentAnim.progress;
+  const curMin=spec.start + presentAnim.total*prog;
+  drawPresentScene(spec, curMin, prog, presentAnim.revealed);
 }
 
-/* ============================================================
-   びょうが(元アプリの drawScene 一式を移植)
-============================================================ */
-function drawScene(spec, curMin, progress, canReveal, hidePerson){
-  const c=document.getElementById("anim-canvas");
+function drawPresentScene(spec, curMin, progress, revealed){
+  const c=document.getElementById("panim-canvas");
   if(!c) return;
   const ctx=c.getContext("2d");
   const W=c.width, H=c.height;
   ctx.clearRect(0,0,W,H);
 
-  const groundY=H-46;
-  ctx.fillStyle="#dbe9f4"; ctx.fillRect(0,groundY,W-140,H-groundY);
+  const groundY=H-70;
+  ctx.fillStyle="#dbe9f4"; ctx.fillRect(0,groundY,W-210,H-groundY);
   ctx.strokeStyle="#b9d0e4"; ctx.lineWidth=3;
-  ctx.beginPath(); ctx.moveTo(0,groundY); ctx.lineTo(W-140,groundY); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(0,groundY); ctx.lineTo(W-210,groundY); ctx.stroke();
 
-  drawPathScene(ctx, spec, progress, curMin, W, H, groundY, hidePerson);
-  drawClock(ctx, W-54, 48, 34, curMin);
+  drawPresentPath(ctx, spec, progress, curMin, W, H, groundY);
+
+  if(revealed) drawPresentClock(ctx, W-105, 92, 62, curMin);
+  else drawPresentStopwatch(ctx, W-105, 92, 62, progress, spec.segs.reduce((a,s)=>a+s.dur,0));
 }
 
-function drawPathScene(ctx, spec, progress, curMin, W, H, groundY, hidePerson){
-  const trackLeft=60, trackRight=W-180;
+function drawPresentPath(ctx, spec, progress, curMin, W, H, groundY){
+  const trackLeft=90, trackRight=W-280;
   const segs=spec.segs;
   const totalDur=segs.reduce((a,s)=>a+s.dur,0);
 
@@ -1124,17 +1468,21 @@ function drawPathScene(ctx, spec, progress, curMin, W, H, groundY, hidePerson){
 
   for(let i=0;i<points.length;i++){
     const x=xs[i];
-    if(points[i]==="家") drawHouse(ctx,x,groundY);
-    else drawStation(ctx,x,groundY);
-    ctx.fillStyle="#2b3a4a"; ctx.font="16px 'BIZ UDPGothic'"; ctx.textAlign="center";
-    ctx.fillText(points[i], x, groundY+30);
+    if(points[i]==="家") drawPresentHouse(ctx,x,groundY);
+    else drawPresentStation(ctx,x,groundY);
+    ctx.fillStyle="#2b3a4a"; ctx.font="24px 'BIZ UDPGothic'"; ctx.textAlign="center";
+    ctx.fillText(points[i], x, groundY+46);
     if(spec.knownIdx===i){
-      ctx.fillStyle="#2f6fae"; ctx.font="bold 14px 'BIZ UDPGothic'";
-      ctx.fillText(jPlain(spec.knownTime), x, groundY-52);
+      ctx.fillStyle="#2f6fae"; ctx.font="bold 21px 'BIZ UDPGothic'";
+      ctx.fillText(jPlain(spec.knownTime), x, groundY-78);
     }
   }
 
-  if(hidePerson) return;
+  segs.forEach((s,i)=>{
+    const midX=(xs[i]+xs[i+1])/2;
+    ctx.fillStyle="#5a6b7b"; ctx.font="bold 20px 'BIZ UDPGothic'"; ctx.textAlign="center";
+    ctx.fillText(`${s.dur}分`, midX, groundY-82);
+  });
 
   let px=trackLeft, kind="walk";
   {
@@ -1150,112 +1498,122 @@ function drawPathScene(ctx, spec, progress, curMin, W, H, groundY, hidePerson){
       a+=segs[i].dur;
     }
   }
-  if(kind==="walk") drawPerson(ctx,px,groundY,curMin);
-  else drawTrain(ctx,px,groundY);
+  if(kind==="walk") drawPresentPerson(ctx,px,groundY,curMin);
+  else drawPresentTrain(ctx,px,groundY);
 }
 
-function drawHouse(ctx,x,gy){
-  ctx.fillStyle="#f3b46b"; ctx.strokeStyle="#c98a3f"; ctx.lineWidth=2;
-  ctx.fillRect(x-16,gy-30,32,30); ctx.strokeRect(x-16,gy-30,32,30);
-  ctx.beginPath(); ctx.moveTo(x-20,gy-30); ctx.lineTo(x,gy-46); ctx.lineTo(x+20,gy-30); ctx.closePath();
+function drawPresentHouse(ctx,x,gy){
+  ctx.fillStyle="#f3b46b"; ctx.strokeStyle="#c98a3f"; ctx.lineWidth=3;
+  ctx.fillRect(x-26,gy-48,52,48); ctx.strokeRect(x-26,gy-48,52,48);
+  ctx.beginPath(); ctx.moveTo(x-32,gy-48); ctx.lineTo(x,gy-74); ctx.lineTo(x+32,gy-48); ctx.closePath();
   ctx.fillStyle="#e07a5f"; ctx.fill();
-  ctx.fillStyle="#8b5e34"; ctx.fillRect(x-5,gy-18,10,18);
+  ctx.fillStyle="#8b5e34"; ctx.fillRect(x-8,gy-29,16,29);
 }
-function drawStation(ctx,x,gy){
-  ctx.fillStyle="#8fb8de"; ctx.strokeStyle="#5f8fc0"; ctx.lineWidth=2;
-  ctx.fillRect(x-20,gy-34,40,34); ctx.strokeRect(x-20,gy-34,40,34);
+function drawPresentStation(ctx,x,gy){
+  ctx.fillStyle="#8fb8de"; ctx.strokeStyle="#5f8fc0"; ctx.lineWidth=3;
+  ctx.fillRect(x-32,gy-54,64,54); ctx.strokeRect(x-32,gy-54,64,54);
   ctx.fillStyle="#fff";
-  for(let i=0;i<2;i++)for(let j=0;j<2;j++) ctx.fillRect(x-13+i*16, gy-28+j*13, 10, 9);
+  for(let i=0;i<2;i++)for(let j=0;j<2;j++) ctx.fillRect(x-21+i*26, gy-45+j*21, 16, 14);
 }
-function drawPerson(ctx,x,gy,curMin){
-  const bob=Math.sin(curMin*3)*2;
+function drawPresentPerson(ctx,x,gy,curMin){
+  const bob=Math.sin(curMin*3)*3;
   ctx.fillStyle="#3f8cd6";
-  ctx.beginPath(); ctx.arc(x,gy-30+bob,7,0,7); ctx.fill();
-  ctx.fillRect(x-5,gy-24+bob,10,16);
-  ctx.strokeStyle="#3f8cd6"; ctx.lineWidth=3;
-  const sw=Math.sin(curMin*4)*5;
-  ctx.beginPath(); ctx.moveTo(x-2,gy-8+bob); ctx.lineTo(x-4-sw,gy+bob);
-  ctx.moveTo(x+2,gy-8+bob); ctx.lineTo(x+4+sw,gy+bob); ctx.stroke();
+  ctx.beginPath(); ctx.arc(x,gy-48+bob,11,0,7); ctx.fill();
+  ctx.fillRect(x-8,gy-38+bob,16,26);
+  ctx.strokeStyle="#3f8cd6"; ctx.lineWidth=5;
+  const sw=Math.sin(curMin*4)*8;
+  ctx.beginPath(); ctx.moveTo(x-3,gy-12+bob); ctx.lineTo(x-6-sw,gy+bob);
+  ctx.moveTo(x+3,gy-12+bob); ctx.lineTo(x+6+sw,gy+bob); ctx.stroke();
 }
-function drawTrainBody(ctx,x,gy,w,h){
+function drawPresentTrainBody(ctx,x,gy,w,h){
   const y=gy-h;
-  ctx.fillStyle="#ff9f5a"; ctx.strokeStyle="#f0873a"; ctx.lineWidth=2;
+  ctx.fillStyle="#ff9f5a"; ctx.strokeStyle="#f0873a"; ctx.lineWidth=3;
   ctx.beginPath();
   ctx.moveTo(x-w/2, y+h);
-  ctx.lineTo(x-w/2, y+5);
-  ctx.quadraticCurveTo(x-w/2, y, x-w/2+7, y);
-  ctx.lineTo(x+w/2-11, y);
-  ctx.quadraticCurveTo(x+w/2, y, x+w/2, y+9);
+  ctx.lineTo(x-w/2, y+8);
+  ctx.quadraticCurveTo(x-w/2, y, x-w/2+11, y);
+  ctx.lineTo(x+w/2-17, y);
+  ctx.quadraticCurveTo(x+w/2, y, x+w/2, y+14);
   ctx.lineTo(x+w/2, y+h);
   ctx.closePath();
   ctx.fill(); ctx.stroke();
 
   ctx.fillStyle="#2f6fae";
-  ctx.fillRect(x-w/2, y+h*0.58, w, 4);
+  ctx.fillRect(x-w/2, y+h*0.58, w, 6);
 
-  ctx.strokeStyle="#5a6b7b"; ctx.lineWidth=2; ctx.lineCap="round";
+  ctx.strokeStyle="#5a6b7b"; ctx.lineWidth=3; ctx.lineCap="round";
   ctx.beginPath();
-  ctx.moveTo(x-6,y); ctx.lineTo(x-4,y-8); ctx.lineTo(x+4,y-8); ctx.lineTo(x+6,y);
+  ctx.moveTo(x-9,y); ctx.lineTo(x-6,y-12); ctx.lineTo(x+6,y-12); ctx.lineTo(x+9,y);
   ctx.stroke();
   return y;
 }
-function drawTrainDoors(ctx,x,y,h,doorOpen,offset,doorW){
-  drawOneDoor(ctx,x-offset,y,h,doorOpen,doorW);
-  drawOneDoor(ctx,x+offset,y,h,doorOpen,doorW);
+function drawPresentTrainDoors(ctx,x,y,h,doorOpen,offset,doorW){
+  drawPresentOneDoor(ctx,x-offset,y,h,doorOpen,doorW);
+  drawPresentOneDoor(ctx,x+offset,y,h,doorOpen,doorW);
 }
-function drawOneDoor(ctx,cx,y,h,doorOpen,doorW){
-  const doorH=h-6;
-  const gapX=cx-doorW/2, gapY=y+3;
+function drawPresentOneDoor(ctx,cx,y,h,doorOpen,doorW){
+  const doorH=h-9;
+  const gapX=cx-doorW/2, gapY=y+5;
   ctx.fillStyle="#3b4a5a";
   ctx.fillRect(gapX,gapY,doorW,doorH);
   const panelW=doorW/2;
   const slide=panelW*0.9*doorOpen;
-  ctx.fillStyle="#dbe7f0"; ctx.strokeStyle="#17324d"; ctx.lineWidth=1.5;
+  ctx.fillStyle="#dbe7f0"; ctx.strokeStyle="#17324d"; ctx.lineWidth=2;
   ctx.fillRect(gapX-slide, gapY, panelW, doorH); ctx.strokeRect(gapX-slide, gapY, panelW, doorH);
   ctx.fillRect(gapX+panelW+slide, gapY, panelW, doorH); ctx.strokeRect(gapX+panelW+slide, gapY, panelW, doorH);
 }
-function drawTrain(ctx,x,gy){
-  const w=64,h=26;
-  const y=drawTrainBody(ctx,x,gy,w,h);
+function drawPresentTrain(ctx,x,gy){
+  const w=100,h=42;
+  const y=drawPresentTrainBody(ctx,x,gy,w,h);
   ctx.fillStyle="#eaf3fb";
-  ctx.fillRect(x-9,y+6,8,8);
-  ctx.fillRect(x+1,y+6,8,8);
-  ctx.fillRect(x-30,y+6,8,8);
-  ctx.fillRect(x+22,y+6,8,8);
-  drawTrainDoors(ctx,x,y,h,0,16,12);
+  ctx.fillRect(x-14,y+9,13,13);
+  ctx.fillRect(x+1,y+9,13,13);
+  ctx.fillRect(x-47,y+9,13,13);
+  ctx.fillRect(x+34,y+9,13,13);
+  drawPresentTrainDoors(ctx,x,y,h,0,25,19);
 }
-function drawClock(ctx,cx,cy,r,curMin){
-  ctx.fillStyle="#fff"; ctx.strokeStyle="#3f8cd6"; ctx.lineWidth=3;
+function drawPresentClock(ctx,cx,cy,r,curMin){
+  ctx.fillStyle="#fff"; ctx.strokeStyle="#3f8cd6"; ctx.lineWidth=4;
   ctx.beginPath(); ctx.arc(cx,cy,r,0,7); ctx.fill(); ctx.stroke();
-  ctx.strokeStyle="#9fb8cf"; ctx.lineWidth=2;
+  ctx.strokeStyle="#9fb8cf"; ctx.lineWidth=3;
   for(let i=0;i<12;i++){
     const a=i*Math.PI/6;
     ctx.beginPath();
-    ctx.moveTo(cx+Math.sin(a)*(r-4), cy-Math.cos(a)*(r-4));
-    ctx.lineTo(cx+Math.sin(a)*(r-9), cy-Math.cos(a)*(r-9));
+    ctx.moveTo(cx+Math.sin(a)*(r-6), cy-Math.cos(a)*(r-6));
+    ctx.lineTo(cx+Math.sin(a)*(r-14), cy-Math.cos(a)*(r-14));
     ctx.stroke();
   }
   const t=fmt(curMin);
   const mA=(t.mm/60)*2*Math.PI;
   const hA=(((t.h%12)+t.mm/60)/12)*2*Math.PI;
-  ctx.strokeStyle="#2b3a4a"; ctx.lineWidth=4; ctx.lineCap="round";
+  ctx.strokeStyle="#2b3a4a"; ctx.lineWidth=6; ctx.lineCap="round";
   ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx+Math.sin(hA)*(r*0.5), cy-Math.cos(hA)*(r*0.5)); ctx.stroke();
-  ctx.strokeStyle="#3f8cd6"; ctx.lineWidth=3;
+  ctx.strokeStyle="#3f8cd6"; ctx.lineWidth=5;
   ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx+Math.sin(mA)*(r*0.72), cy-Math.cos(mA)*(r*0.72)); ctx.stroke();
-  ctx.fillStyle="#2b3a4a"; ctx.beginPath(); ctx.arc(cx,cy,3,0,7); ctx.fill();
-  ctx.fillStyle="#5a6b7b"; ctx.font="11px 'BIZ UDPGothic'"; ctx.textAlign="center";
-  ctx.fillText("いま", cx, cy+r+16);
-  ctx.fillStyle="#2b3a4a"; ctx.font="bold 16px 'BIZ UDPGothic'";
-  ctx.fillText(jPlain(Math.round(curMin)), cx, cy+r+32);
+  ctx.fillStyle="#2b3a4a"; ctx.beginPath(); ctx.arc(cx,cy,5,0,7); ctx.fill();
+  ctx.fillStyle="#2b3a4a"; ctx.font="bold 22px 'BIZ UDPGothic'"; ctx.textAlign="center";
+  ctx.fillText(jPlain(Math.round(curMin)), cx, cy+r+34);
+}
+function drawPresentStopwatch(ctx,cx,cy,r,progress,total){
+  ctx.fillStyle="#fff"; ctx.strokeStyle="#ff9f5a"; ctx.lineWidth=5;
+  ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill(); ctx.stroke();
+  ctx.fillStyle="#ff9f5a"; ctx.fillRect(cx-9,cy-r-14,18,15);
+
+  const angle = -Math.PI/2 + Math.PI*2*Math.max(0,Math.min(1,progress));
+  ctx.strokeStyle="#3f8cd6"; ctx.lineWidth=6; ctx.lineCap="round";
+  ctx.beginPath();
+  ctx.moveTo(cx,cy);
+  ctx.lineTo(cx+Math.cos(angle)*(r*0.68), cy+Math.sin(angle)*(r*0.68));
+  ctx.stroke();
+  ctx.fillStyle="#2b3a4a"; ctx.beginPath(); ctx.arc(cx,cy,5,0,7); ctx.fill();
+
+  ctx.fillStyle="#2b3a4a"; ctx.font="bold 22px 'BIZ UDPGothic'"; ctx.textAlign="center";
+  ctx.fillText(`${Math.round(total*Math.max(0,Math.min(1,progress)))}ふん`, cx, cy+r+34);
 }
 
 /* ============================================================
    はいせん と きどう
 ============================================================ */
-document.getElementById("anim-close").addEventListener("click", closeAnimModal);
-document.getElementById("anim-reset").addEventListener("click",()=>{
-  if(animCurrentProblem) openAnimModal(animCurrentProblem);
-});
 document.getElementById("btn-back-setup").addEventListener("click",()=> show("screen-setup"));
 document.getElementById("btn-regenerate").addEventListener("click",()=>{
   generateProblems();
@@ -1269,12 +1627,18 @@ document.getElementById("btn-goto-print").addEventListener("click", gotoPrintPre
 document.getElementById("btn-back-edit").addEventListener("click",()=> show("screen-edit"));
 document.getElementById("btn-do-print").addEventListener("click",()=> window.print());
 
+document.getElementById("btn-present").addEventListener("click", startPresent);
+document.getElementById("btn-present-exit").addEventListener("click",()=>{ stopPresentAnim(); show("screen-edit"); });
+document.getElementById("btn-present-again").addEventListener("click", startPresent);
+document.getElementById("btn-present-back").addEventListener("click",()=> show("screen-edit"));
+
 let lastTouch=0;
 document.addEventListener("touchend",e=>{
   const now=Date.now();
   if(now-lastTouch<=300){ e.preventDefault(); }
   lastTouch=now;
 },{passive:false});
+document.addEventListener("gesturestart",e=>{ e.preventDefault(); });
 
 bindSetup();
 initHelp();
