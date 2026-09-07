@@ -224,14 +224,6 @@
       </div>
 
       <div class="set-row">
-        <span class="label">答え方</span>
-        <div class="seg" id="seg-mode">
-          <button data-v="fill">空欄に書く</button>
-          <button data-v="choice" class="on">4択から選ぶ</button>
-        </div>
-      </div>
-
-      <div class="set-row">
         <span class="label">問題の数</span>
         <div class="stepper-box">
           <button class="step-btn" id="cnt-minus">▽</button>
@@ -258,8 +250,9 @@
     <div class="topbar">
       <button class="btn ghost small" id="btn-back-setup">← 設定にもどる</button>
       <div class="tabs">
-        <button class="tab-btn on" id="tab-problem">問題プリント</button>
-        <button class="tab-btn" id="tab-answer">解答プリント</button>
+        <button class="tab-btn on" id="tab-blank">問題(空欄)</button>
+        <button class="tab-btn" id="tab-choice">問題(4択)</button>
+        <button class="tab-btn" id="tab-answer">解答</button>
       </div>
       <button class="btn accent small" id="btn-regenerate">作り直す</button>
     </div>
@@ -497,9 +490,9 @@ function buildChoices(ansMin, raw){
    じょうたい
 ============================================================ */
 const state = {
-  settings:{ levels:[1], diff:"easy", direction:"random", mode:"choice", count:4 },
+  settings:{ levels:[1], diff:"easy", direction:"random", count:4 },
   problems:[],   // { level, q, ansH, ansM, choices, op, base, delta, walk, ride, anim }
-  tab:"problem", // problem | answer
+  tab:"blank", // blank | choice | answer
 };
 const present = { idx:0 };
 
@@ -542,12 +535,6 @@ function bindSetup(){
       b.classList.add("on"); state.settings.direction=b.dataset.v;
     });
   });
-  document.querySelectorAll("#seg-mode button").forEach(b=>{
-    b.addEventListener("click",()=>{
-      document.querySelectorAll("#seg-mode button").forEach(x=>x.classList.remove("on"));
-      b.classList.add("on"); state.settings.mode=b.dataset.v;
-    });
-  });
   const cnt=document.getElementById("cnt-in");
   const clampCnt=()=>{ let v=parseInt(cnt.value)||4; v=Math.max(1,Math.min(30,v)); cnt.value=v; state.settings.count=v; };
   document.getElementById("cnt-minus").addEventListener("click",()=>{ cnt.value=(parseInt(cnt.value)||4)-1; clampCnt(); });
@@ -564,7 +551,7 @@ function generateAndGo(){
   }
   generateProblems();
   show("screen-edit");
-  state.tab="problem";
+  state.tab="blank";
   renderTabs();
   renderProblemList();
 }
@@ -577,13 +564,11 @@ function generateProblems(){
     const raw = makeRawProblem(choice(levels), state.settings);
     const t=fmt(raw.ans);
     const prob = {
-      level:raw.level, q:raw.q, ansH:t.h, ansM:t.mm, choices:null,
+      level:raw.level, q:raw.q, ansH:t.h, ansM:t.mm,
       op:raw.op, base:raw.base, delta:raw.delta, walk:raw.walk, ride:raw.ride,
       anim:raw.anim,
+      choices: buildChoices(raw.ans, raw), // 空欄・4択どちらのプリントも作れるよう、常に4択データも持たせる
     };
-    if(state.settings.mode==="choice"){
-      prob.choices = buildChoices(raw.ans, raw);
-    }
     list.push(prob);
   }
   state.problems=list;
@@ -602,16 +587,21 @@ function show(id){
    編集・プレビュー画面
 ============================================================ */
 function renderTabs(){
-  document.getElementById("tab-problem").classList.toggle("on", state.tab==="problem");
+  document.getElementById("tab-blank").classList.toggle("on", state.tab==="blank");
+  document.getElementById("tab-choice").classList.toggle("on", state.tab==="choice");
   document.getElementById("tab-answer").classList.toggle("on", state.tab==="answer");
-  document.getElementById("tab-desc").innerHTML = state.tab==="problem"
-    ? `生徒用のプリントです。答え欄は空です。`
-    : `先生用のプリントです。問題プリントと同じ見た目で、答え欄に答えが入っています。`;
+  const descMap={
+    blank:  `生徒用のプリントです(空欄に書くタイプ)。答え欄は空です。`,
+    choice: `生徒用のプリントです(4択から選ぶタイプ)。同じ問題を4択で出せます。`,
+    answer: `先生用のプリントです。空欄の答えと4択の正解を、両方まとめて確認できます。`,
+  };
+  document.getElementById("tab-desc").innerHTML = descMap[state.tab];
 }
 
 function renderProblemList(){
   const box=document.getElementById("prob-list");
   box.innerHTML="";
+  const tab=state.tab;
   state.problems.forEach((p,i)=>{
     const card=document.createElement("div");
     card.className="prob-card";
@@ -619,7 +609,10 @@ function renderProblemList(){
       <div class="prob-head">
         <span class="prob-num">${i+1}問目</span>
       </div>
-      <textarea class="prob-text" data-i="${i}" data-f="q">${stripTagsForEdit(p.q)}</textarea>
+      <textarea class="prob-text" data-i="${i}" data-f="q" ${tab==="answer"?"readonly":""}>${stripTagsForEdit(p.q)}</textarea>`;
+
+    if(tab==="blank"){
+      html+=`
       <div class="prob-ans-row">
         <span class="mini-lbl">正答：</span>
         <input class="mini-num" type="number" data-i="${i}" data-f="ansH" value="${p.ansH}" min="0" max="23">
@@ -628,7 +621,7 @@ function renderProblemList(){
         <span class="mini-lbl">分</span>
       </div>
       <p class="ans-note">※発表モードのアニメは自動作成時の数字で動きます。正答をここで書きかえても、アニメの答えは変わりません。</p>`;
-    if(p.choices){
+    }else if(tab==="choice"){
       html+=`<div class="choice-edit" data-i="${i}">`;
       p.choices.forEach((c,ci)=>{
         html+=`<span class="c-item ${c.correct?'correct':''}">
@@ -637,9 +630,24 @@ function renderProblemList(){
           <button class="del-btn" data-i="${i}" data-ci="${ci}" data-act="mark">${c.correct?'正解':'これを正解に'}</button>
         </span>`;
       });
+      html+=`</div>
+      <p class="ans-note">※発表モードのアニメは自動作成時の数字で動きます。正答をここで書きかえても、アニメの答えは変わりません。</p>`;
+    }else{ // answer
+      html+=`
+      <div class="prob-ans-row">
+        <span class="mini-lbl">空欄の答え：</span>
+        <b>${jPrintTime(p.ansH,p.ansM)}</b>
+      </div>
+      <div class="choice-edit" data-i="${i}">`;
+      p.choices.forEach((c,ci)=>{
+        html+=`<span class="c-item ${c.correct?'correct':''}">${["①","②","③","④"][ci]} ${jPrintTime(c.h,c.m)}${c.correct?'（正解）':''}</span>`;
+      });
       html+=`</div>`;
     }
-    html+=`<div style="text-align:right; margin-top:6px;"><button class="del-btn" data-i="${i}" data-act="del">この問題を削除</button></div>`;
+
+    if(tab!=="answer"){
+      html+=`<div style="text-align:right; margin-top:6px;"><button class="del-btn" data-i="${i}" data-act="del">この問題を削除</button></div>`;
+    }
     card.innerHTML=html;
     box.appendChild(card);
   });
@@ -708,18 +716,22 @@ function qToPrintHtml(rawQ){
 }
 
 function buildSheetItemsHtml(mode){
-  const showAnswer = mode==="answer";
+  // mode: "blank"(空欄用) | "choice"(4択用) | "answer"(解答。両方まとめて表示)
   return state.problems.map((p,i)=>{
     const qHtml = qToPrintHtml(p.q);
     let answerArea="";
-    if(p.choices){
+    if(mode==="choice"){
       answerArea = `<div class="choices">` + p.choices.map((c,ci)=>{
-        const mark = showAnswer && c.correct ? " correct" : "";
+        return `<span class="choice">${["①","②","③","④"][ci]} ${jPrintTime(c.h,c.m)}</span>`;
+      }).join("") + `</div>`;
+    }else if(mode==="answer"){
+      const choicesHtml = `<div class="choices">` + p.choices.map((c,ci)=>{
+        const mark = c.correct ? " correct" : "";
         return `<span class="choice${mark}">${["①","②","③","④"][ci]} ${jPrintTime(c.h,c.m)}</span>`;
       }).join("") + `</div>`;
-    }else{
-      const ansText = showAnswer ? jPrintTime(p.ansH, p.ansM) : "";
-      answerArea = `<div class="blank">（<span class="fillline">${ansText}</span>）</div>`;
+      answerArea = `<div class="blank">（<span class="fillline">${jPrintTime(p.ansH,p.ansM)}</span>）</div>${choicesHtml}`;
+    }else{ // blank
+      answerArea = `<div class="blank">（<span class="fillline"></span>）</div>`;
     }
     return `<div class="q-item">
       <div class="q-num">${i+1}：</div>
@@ -738,8 +750,7 @@ function buildAnimDataJson(){
 }
 
 function buildPrintHtml(mode){
-  const showAnswer = mode==="answer";
-  const title = showAnswer ? "なんじにでるかな？　解答プリント" : "なんじにでるかな？";
+  const title = sheetTitleFor(mode);
   const items = buildSheetItemsHtml(mode);
   const animDataJson = buildAnimDataJson();
 
@@ -1246,11 +1257,18 @@ document.addEventListener("gesturestart",e=>{ e.preventDefault(); });
 </html>`;
 }
 
+/* タブ("blank"|"choice"|"answer") からプリントのタイトルを得る */
+function sheetTitleFor(mode){
+  if(mode==="answer") return "なんじにでるかな？　解答プリント";
+  if(mode==="choice") return "なんじにでるかな？（4択）";
+  return "なんじにでるかな？";
+}
+
 /* ============================================================
    印刷プレビュー(同じページ内で表示 → その場で印刷)
 ============================================================ */
 function renderPrintSheet(mode){
-  const title = mode==="answer" ? "なんじにでるかな？　解答プリント" : "なんじにでるかな？";
+  const title = sheetTitleFor(mode);
   const items = buildSheetItemsHtml(mode);
   document.getElementById("print-sheet").innerHTML = `
     <div class="headline">${title}</div>
@@ -1260,20 +1278,26 @@ function renderPrintSheet(mode){
 }
 
 function gotoPrintPreview(){
-  renderPrintSheet(state.tab==="answer" ? "answer" : "problem");
+  renderPrintSheet(state.tab);
   show("screen-print");
 }
 
 /* ============================================================
    ダウンロード・コピー
 ============================================================ */
+function downloadFileNameFor(tab){
+  if(tab==="answer") return "nanjinideru-kaitou.html";
+  if(tab==="choice") return "nanjinideru-4taku.html";
+  return "nanjinideru-kuuran.html";
+}
+
 function downloadCurrentTab(){
-  const html = buildPrintHtml(state.tab==="answer" ? "answer" : "problem");
+  const html = buildPrintHtml(state.tab);
   const blob = new Blob([html], {type:"text/html"});
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = state.tab==="answer" ? "nanjinideru-kaitou.html" : "nanjinideru-mondai.html";
+  a.download = downloadFileNameFor(state.tab);
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -1281,7 +1305,7 @@ function downloadCurrentTab(){
 }
 
 function copyCurrentTab(){
-  const html = buildPrintHtml(state.tab==="answer" ? "answer" : "problem");
+  const html = buildPrintHtml(state.tab);
   const ta=document.createElement("textarea");
   ta.value=html;
   ta.style.position="fixed"; ta.style.left="-9999px";
@@ -1664,8 +1688,9 @@ document.getElementById("btn-regenerate").addEventListener("click",()=>{
   generateProblems();
   renderProblemList();
 });
-document.getElementById("tab-problem").addEventListener("click",()=>{ state.tab="problem"; renderTabs(); });
-document.getElementById("tab-answer").addEventListener("click",()=>{ state.tab="answer"; renderTabs(); });
+document.getElementById("tab-blank").addEventListener("click",()=>{ state.tab="blank"; renderTabs(); renderProblemList(); });
+document.getElementById("tab-choice").addEventListener("click",()=>{ state.tab="choice"; renderTabs(); renderProblemList(); });
+document.getElementById("tab-answer").addEventListener("click",()=>{ state.tab="answer"; renderTabs(); renderProblemList(); });
 document.getElementById("btn-download").addEventListener("click", downloadCurrentTab);
 document.getElementById("btn-copy").addEventListener("click", copyCurrentTab);
 document.getElementById("btn-goto-print").addEventListener("click", gotoPrintPreview);
