@@ -119,30 +119,30 @@
     width:210mm;
     min-height:297mm;
     margin:0 auto;
-    padding:15mm 10mm 15mm 28mm;
+    padding:12mm 10mm 12mm 28mm;
     box-shadow:0 2px 10px rgba(0,0,0,.15);
   }
   .sheet .headline{
     font-family:"BIZ UDMincho", serif;
-    font-size:16pt;
+    font-size:15pt;
     text-align:center;
-    margin:0 0 10px;
+    margin:0 0 8px;
     font-weight:700;
   }
   .sheet .name-row{
     display:flex; align-items:baseline; gap:8px;
-    padding-bottom:6px; margin-bottom:16px;
+    padding-bottom:4px; margin-bottom:10px;
   }
   .sheet .name-row .lbl{ font-size:12pt; }
   .sheet .name-row .paren{ font-size:12pt; letter-spacing:2px; }
-  .sheet .q-item{ display:flex; gap:10px; margin-bottom:32px; align-items:baseline; }
+  .sheet .q-item{ display:flex; gap:10px; margin-bottom:14px; align-items:baseline; }
   .sheet .q-num{
-    flex:0 0 auto; font-size:13pt; font-weight:700; min-width:1.6em; line-height:2.3;
+    flex:0 0 auto; font-size:12.5pt; font-weight:700; min-width:1.6em; line-height:1.7;
   }
-  .sheet .q-text{ font-size:13pt; line-height:2.3; }
-  .sheet .blank{ font-size:14pt; margin-top:6px; font-weight:700; }
+  .sheet .q-text{ font-size:12.5pt; line-height:1.7; }
+  .sheet .blank{ font-size:13.5pt; margin-top:3px; font-weight:700; }
   .sheet .fillline{ display:inline-block; min-width:6em; text-align:center; }
-  .sheet .choices{ display:flex; flex-wrap:wrap; gap:12px 18px; margin-top:8px; font-size:13pt; line-height:1.8; }
+  .sheet .choices{ display:flex; flex-wrap:wrap; gap:6px 14px; margin-top:5px; font-size:12.5pt; line-height:1.5; }
   .sheet .choice{ padding:2px 4px; }
   .sheet .choice.correct{ font-weight:700; text-decoration:underline; }
 
@@ -235,7 +235,7 @@
         <span class="label">問題の数</span>
         <div class="stepper-box">
           <button class="step-btn" id="cnt-minus">▽</button>
-          <input class="num-in" id="cnt-in" type="number" inputmode="numeric" value="4" min="1" max="30">
+          <input class="num-in" id="cnt-in" type="number" inputmode="numeric" value="5" min="1" max="30">
           <button class="step-btn" id="cnt-plus">△</button>
           <span class="unit">問</span>
         </div>
@@ -504,7 +504,7 @@ function buildChoices(ansMin, raw, step){
    じょうたい
 ============================================================ */
 const state = {
-  settings:{ levels:[1], diff:"easy", direction:"random", step:5, count:4 },
+  settings:{ levels:[1], diff:"easy", direction:"random", step:5, count:5 },
   problems:[],   // { level, q, ansH, ansM, choices, op, base, delta, walk, ride, anim }
   tab:"blank", // blank | choice | answer
 };
@@ -563,9 +563,9 @@ function bindSetup(){
     });
   });
   const cnt=document.getElementById("cnt-in");
-  const clampCnt=()=>{ let v=parseInt(cnt.value)||4; v=Math.max(1,Math.min(30,v)); cnt.value=v; state.settings.count=v; };
-  document.getElementById("cnt-minus").addEventListener("click",()=>{ cnt.value=(parseInt(cnt.value)||4)-1; clampCnt(); });
-  document.getElementById("cnt-plus").addEventListener("click",()=>{ cnt.value=(parseInt(cnt.value)||4)+1; clampCnt(); });
+  const clampCnt=()=>{ let v=parseInt(cnt.value)||5; v=Math.max(1,Math.min(30,v)); cnt.value=v; state.settings.count=v; };
+  document.getElementById("cnt-minus").addEventListener("click",()=>{ cnt.value=(parseInt(cnt.value)||5)-1; clampCnt(); });
+  document.getElementById("cnt-plus").addEventListener("click",()=>{ cnt.value=(parseInt(cnt.value)||5)+1; clampCnt(); });
   cnt.addEventListener("change",clampCnt);
 
   document.getElementById("btn-generate").addEventListener("click", generateAndGo);
@@ -813,31 +813,31 @@ function buildPrintHtml(mode){
     width:210mm;
     min-height:297mm;
     margin:0 auto;
-    padding:15mm 10mm 15mm 28mm;
+    padding:12mm 10mm 12mm 28mm;
     box-shadow:0 2px 10px rgba(0,0,0,.15);
   }
   .headline{
     font-family:"BIZ UDMincho", serif;
-    font-size:16pt;
+    font-size:15pt;
     text-align:center;
-    margin:0 0 10px;
+    margin:0 0 8px;
     font-weight:700;
   }
   .name-row{
     display:flex; align-items:baseline; gap:8px;
-    padding-bottom:6px; margin-bottom:16px;
+    padding-bottom:4px; margin-bottom:10px;
   }
   .name-row .lbl{ font-size:12pt; }
   .name-row .paren{ font-size:12pt; letter-spacing:2px; }
 
-  .q-item{ display:flex; gap:10px; margin-bottom:32px; page-break-inside:avoid; align-items:baseline; }
+  .q-item{ display:flex; gap:10px; margin-bottom:14px; page-break-inside:avoid; align-items:baseline; }
   .q-num{
-    flex:0 0 auto; font-size:13pt; font-weight:700; min-width:1.6em; line-height:2.3;
+    flex:0 0 auto; font-size:12.5pt; font-weight:700; min-width:1.6em; line-height:1.7;
   }
-  .q-text{ font-size:13pt; line-height:2.3; }
-  .blank{ font-size:14pt; margin-top:6px; font-weight:700; }
+  .q-text{ font-size:12.5pt; line-height:1.7; }
+  .blank{ font-size:13.5pt; margin-top:3px; font-weight:700; }
   .fillline{ display:inline-block; min-width:6em; text-align:center; }
-  .choices{ display:flex; flex-wrap:wrap; gap:12px 18px; margin-top:8px; font-size:13pt; line-height:1.8; }
+  .choices{ display:flex; flex-wrap:wrap; gap:6px 14px; margin-top:5px; font-size:12.5pt; line-height:1.5; }
   .choice{ padding:2px 4px; }
   .choice.correct{ font-weight:700; text-decoration:underline; }
 
