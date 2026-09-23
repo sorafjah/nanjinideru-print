@@ -224,6 +224,14 @@
       </div>
 
       <div class="set-row">
+        <span class="label">きざみ</span>
+        <div class="seg" id="seg-step">
+          <button data-v="5" class="on">5分きざみ</button>
+          <button data-v="1">1分きざみ</button>
+        </div>
+      </div>
+
+      <div class="set-row">
         <span class="label">問題の数</span>
         <div class="stepper-box">
           <button class="step-btn" id="cnt-minus">▽</button>
@@ -233,8 +241,8 @@
         </div>
       </div>
 
-      <p class="hint">
-        時刻と時間はいつも5分きざみです。<br>
+      <p class="hint" id="setup-hint">
+        時刻と時間は5分きざみです。<br>
         時をこえない＝短い時間で時刻が1時間の中におさまります。時をこえる＝時をまたぐ計算も出ます。<br>
         作ったあとで、1問ずつ文章や数字を直接直すこともできます。
       </p>
@@ -313,7 +321,7 @@
   <div class="modal">
     <h2>使い方</h2>
     <ol>
-      <li>種類・むずかしさ・答え方・問題数を選んで「問題を作る」を押してね。</li>
+      <li>種類・むずかしさ・答え方・きざみ・問題数を選んで「問題を作る」を押してね。</li>
       <li>作られた問題は、1問ずつ文章や数字を書きかえられるよ。</li>
       <li>「解答アニメ」を押すと、大きな画面でアニメを見せながら1問ずつ答えを確かめられるよ。</li>
       <li>タブで「問題プリント」と「解答プリント(答え入り)」を切りかえられるよ。</li>
@@ -332,7 +340,7 @@
 "use strict";
 
 /* ============================================================
-   じかんの けいさん(0時からの ぷんで あつかう / すべて5分きざみ)
+   じかんの けいさん(0時からの ぷんで あつかう / きざみ は 1分 か 5分)
 ============================================================ */
 function fmt(m){ m=((m%1440)+1440)%1440; return {h:Math.floor(m/60), mm:m%60}; }
 function jRuby(m){ const t=fmt(m); return t.mm===0 ? `${t.h}時` : `${t.h}時${t.mm}分`; }
@@ -342,8 +350,13 @@ function jPlain(m){ const t=fmt(m); return t.mm===0 ? `${t.h}時` : `${t.h}時${
 function rInt(a,b){ return a+Math.floor(Math.random()*(b-a+1)); }
 function choice(a){ return a[Math.floor(Math.random()*a.length)]; }
 function sameHour(a,b){ return Math.floor(a/60)===Math.floor(b/60); }
-function rM5(range){ const a=range[0], b=range[1]; const steps=Math.max(0,Math.floor((b-a)/5)); return a+5*rInt(0,steps); }
-function time5(hmin,hmax){ return rInt(hmin,hmax)*60 + rInt(0,11)*5; }
+
+/* range内から、stepきざみの値をランダムに1つ返す(たとえば時間の長さ) */
+function rStep(range, step){ const a=range[0], b=range[1]; const steps=Math.max(0,Math.floor((b-a)/step)); return a+step*rInt(0,steps); }
+
+/* hmin時〜hmax時の間で、stepきざみの時刻をランダムに1つ返す */
+function timeStep(hmin,hmax,step){ const perHour=Math.max(1,Math.floor(60/step)); return rInt(hmin,hmax)*60 + rInt(0,perHour-1)*step; }
+
 function norm(m){ return ((m%1440)+1440)%1440; }
 
 const DIFF = {
@@ -363,13 +376,14 @@ function pickBack(direction){
 
 function makeRawProblem(level, settings){
   const p = DIFF[settings.diff];
+  const step = settings.step;
   const back = pickBack(settings.direction);
 
   if(level===1){
-    const walk = rM5(p.walk);
+    const walk = rStep(p.walk, step);
     if(!back){
       let now;
-      do{ now=time5(7,17); }while(!p.crossHour && !sameHour(now, now+walk));
+      do{ now=timeStep(7,17,step); }while(!p.crossHour && !sameHour(now, now+walk));
       const ans = now+walk;
       return {
         level, q:`<ruby>家<rt>いえ</rt></ruby>から<ruby>駅<rt>えき</rt></ruby>まで<ruby>歩<rt>ある</rt></ruby>いて ${walk}分かかります。<br><ruby>今<rt>いま</rt></ruby> ${jHL(now)}です。<br>何時何分に<ruby>駅<rt>えき</rt></ruby>に<ruby>着<rt>つ</rt></ruby>きますか。`,
@@ -378,7 +392,7 @@ function makeRawProblem(level, settings){
       };
     }else{
       let arr;
-      do{ arr=time5(8,18); }while(!p.crossHour && !sameHour(arr, arr-walk));
+      do{ arr=timeStep(8,18,step); }while(!p.crossHour && !sameHour(arr, arr-walk));
       const ans = arr-walk;
       return {
         level, q:`${jHL(arr)}に<ruby>駅<rt>えき</rt></ruby>に<ruby>着<rt>つ</rt></ruby>きたいです。<br><ruby>歩<rt>ある</rt></ruby>くと ${walk}分かかります。<br>何時何分に<ruby>家<rt>いえ</rt></ruby>を<ruby>出<rt>で</rt></ruby>たらいいですか。`,
@@ -389,10 +403,10 @@ function makeRawProblem(level, settings){
   }
 
   if(level===2){
-    const ride = rM5(p.ride);
+    const ride = rStep(p.ride, step);
     if(!back){
       let now;
-      do{ now=time5(7,17); }while(!p.crossHour && !sameHour(now, now+ride));
+      do{ now=timeStep(7,17,step); }while(!p.crossHour && !sameHour(now, now+ride));
       const ans = now+ride;
       return {
         level, q:`${jHL(now)}に<ruby>電車<rt>でんしゃ</rt></ruby>に<ruby>乗<rt>の</rt></ruby>りました。<br><ruby>電車<rt>でんしゃ</rt></ruby>は ${ride}分かかります。<br>何時何分に<ruby>着<rt>つ</rt></ruby>きますか。`,
@@ -401,7 +415,7 @@ function makeRawProblem(level, settings){
       };
     }else{
       let arr;
-      do{ arr=time5(8,18); }while(!p.crossHour && !sameHour(arr, arr-ride));
+      do{ arr=timeStep(8,18,step); }while(!p.crossHour && !sameHour(arr, arr-ride));
       const ans = arr-ride;
       return {
         level, q:`${jHL(arr)}に<ruby>着<rt>つ</rt></ruby>きたいです。<br><ruby>電車<rt>でんしゃ</rt></ruby>は ${ride}分かかります。<br>何時何分の<ruby>電車<rt>でんしゃ</rt></ruby>に<ruby>乗<rt>の</rt></ruby>ればいいですか。`,
@@ -411,12 +425,12 @@ function makeRawProblem(level, settings){
     }
   }
 
-  const walk = rM5(p.walk);
-  const ride = rM5(p.ride);
+  const walk = rStep(p.walk, step);
+  const ride = rStep(p.ride, step);
   const totalDelta = walk+ride;
   if(back){
     let goal;
-    do{ goal = time5(9,17); }while( goal - ride - walk < 6*60 );
+    do{ goal = timeStep(9,17,step); }while( goal - ride - walk < 6*60 );
     const ans = goal - ride - walk;
     return {
       level, q:`B<ruby>駅<rt>えき</rt></ruby>に ${jHL(goal)}に<ruby>着<rt>つ</rt></ruby>きたいです。<br><ruby>家<rt>いえ</rt></ruby>からA<ruby>駅<rt>えき</rt></ruby>まで<ruby>歩<rt>ある</rt></ruby>いて ${walk}分、A<ruby>駅<rt>えき</rt></ruby>からB<ruby>駅<rt>えき</rt></ruby>まで<ruby>電車<rt>でんしゃ</rt></ruby>で ${ride}分かかります。<br>何時何分に<ruby>家<rt>いえ</rt></ruby>を<ruby>出<rt>で</rt></ruby>たらいいですか。`,
@@ -425,7 +439,7 @@ function makeRawProblem(level, settings){
     };
   }else{
     let now;
-    do{ now = time5(7,17); }while( now + walk + ride >= 24*60 );
+    do{ now = timeStep(7,17,step); }while( now + walk + ride >= 24*60 );
     const ans = now + walk + ride;
     return {
       level, q:`<ruby>今<rt>いま</rt></ruby> ${jHL(now)}です。<ruby>家<rt>いえ</rt></ruby>からA<ruby>駅<rt>えき</rt></ruby>まで<ruby>歩<rt>ある</rt></ruby>いて ${walk}分、A<ruby>駅<rt>えき</rt></ruby>からB<ruby>駅<rt>えき</rt></ruby>まで<ruby>電車<rt>でんしゃ</rt></ruby>で ${ride}分かかります。<br>何時何分にB<ruby>駅<rt>えき</rt></ruby>に<ruby>着<rt>つ</rt></ruby>きますか。`,
@@ -436,9 +450,9 @@ function makeRawProblem(level, settings){
 }
 
 /* ============================================================
-   4たくの ダミー生成
+   4たくの ダミー生成(きざみに合わせてズレを作る)
 ============================================================ */
-function commonMistakes(raw){
+function commonMistakes(raw, step){
   const out=[];
   if(raw){
     const b=fmt(raw.base);
@@ -453,30 +467,30 @@ function commonMistakes(raw){
   return out;
 }
 
-function buildChoices(ansMin, raw){
+function buildChoices(ansMin, raw, step){
   const used = new Set([ansMin]);
   const opts = [ansMin];
 
-  const mistakes = commonMistakes(raw).filter(v=> !used.has(v));
+  const mistakes = commonMistakes(raw, step).filter(v=> !used.has(v));
   if(mistakes.length){
     const pick = choice(mistakes);
     opts.push(pick); used.add(pick);
   }
 
-  const deltas = [5,-5,10,-10,15,-15,20,-20];
+  const baseDeltas = step===1 ? [1,-1,2,-2,3,-3,4,-4] : [5,-5,10,-10,15,-15,20,-20];
   let guard=0;
   while(opts.length<4 && guard<40){
     guard++;
-    const d = choice(deltas);
+    const d = choice(baseDeltas);
     const v = norm(ansMin + d);
     if(!used.has(v)){ opts.push(v); used.add(v); }
   }
-  let extra=25;
+  let extra=step===1 ? 5 : 25;
   while(opts.length<4 && guard<80){
     guard++;
     const v = norm(ansMin + extra);
     if(!used.has(v)){ opts.push(v); used.add(v); }
-    extra+=5;
+    extra+=step;
   }
 
   for(let i=opts.length-1;i>0;i--){
@@ -490,7 +504,7 @@ function buildChoices(ansMin, raw){
    じょうたい
 ============================================================ */
 const state = {
-  settings:{ levels:[1], diff:"easy", direction:"random", count:4 },
+  settings:{ levels:[1], diff:"easy", direction:"random", step:5, count:4 },
   problems:[],   // { level, q, ansH, ansM, choices, op, base, delta, walk, ride, anim }
   tab:"blank", // blank | choice | answer
 };
@@ -512,6 +526,12 @@ function clearFeedbackEl(id){
 /* ============================================================
    せってい画面
 ============================================================ */
+function updateSetupHint(){
+  const stepTxt = state.settings.step===1 ? "1分きざみ" : "5分きざみ";
+  document.getElementById("setup-hint").innerHTML =
+    `時刻と時間は${stepTxt}です。<br>時をこえない＝短い時間で時刻が1時間の中におさまります。時をこえる＝時をまたぐ計算も出ます。<br>作ったあとで、1問ずつ文章や数字を直接直すこともできます。`;
+}
+
 function bindSetup(){
   document.querySelectorAll("#chip-level .chip").forEach(b=>{
     b.addEventListener("click",()=>{
@@ -533,6 +553,13 @@ function bindSetup(){
     b.addEventListener("click",()=>{
       document.querySelectorAll("#seg-direction button").forEach(x=>x.classList.remove("on"));
       b.classList.add("on"); state.settings.direction=b.dataset.v;
+    });
+  });
+  document.querySelectorAll("#seg-step button").forEach(b=>{
+    b.addEventListener("click",()=>{
+      document.querySelectorAll("#seg-step button").forEach(x=>x.classList.remove("on"));
+      b.classList.add("on"); state.settings.step=parseInt(b.dataset.v);
+      updateSetupHint();
     });
   });
   const cnt=document.getElementById("cnt-in");
@@ -559,6 +586,7 @@ function generateAndGo(){
 function generateProblems(){
   const n=state.settings.count;
   const levels=state.settings.levels;
+  const step=state.settings.step;
   const list=[];
   for(let i=0;i<n;i++){
     const raw = makeRawProblem(choice(levels), state.settings);
@@ -567,7 +595,7 @@ function generateProblems(){
       level:raw.level, q:raw.q, ansH:t.h, ansM:t.mm,
       op:raw.op, base:raw.base, delta:raw.delta, walk:raw.walk, ride:raw.ride,
       anim:raw.anim,
-      choices: buildChoices(raw.ans, raw), // 空欄・4択どちらのプリントも作れるよう、常に4択データも持たせる
+      choices: buildChoices(raw.ans, raw, step), // 空欄・4択どちらのプリントも作れるよう、常に4択データも持たせる
     };
     list.push(prob);
   }
@@ -602,6 +630,7 @@ function renderProblemList(){
   const box=document.getElementById("prob-list");
   box.innerHTML="";
   const tab=state.tab;
+  const step=state.settings.step;
   state.problems.forEach((p,i)=>{
     const card=document.createElement("div");
     card.className="prob-card";
@@ -617,7 +646,7 @@ function renderProblemList(){
         <span class="mini-lbl">正答：</span>
         <input class="mini-num" type="number" data-i="${i}" data-f="ansH" value="${p.ansH}" min="0" max="23">
         <span class="mini-lbl">時</span>
-        <input class="mini-num" type="number" data-i="${i}" data-f="ansM" value="${p.ansM}" min="0" max="55" step="5">
+        <input class="mini-num" type="number" data-i="${i}" data-f="ansM" value="${p.ansM}" min="0" max="59" step="${step}">
         <span class="mini-lbl">分</span>
       </div>
       <p class="ans-note">※発表モードのアニメは自動作成時の数字で動きます。正答をここで書きかえても、アニメの答えは変わりません。</p>`;
@@ -626,7 +655,7 @@ function renderProblemList(){
       p.choices.forEach((c,ci)=>{
         html+=`<span class="c-item ${c.correct?'correct':''}">
           <input class="mini-num" style="width:44px;height:34px;font-size:14px;" type="number" data-i="${i}" data-ci="${ci}" data-f="ch" value="${c.h}" min="0" max="23">:
-          <input class="mini-num" style="width:44px;height:34px;font-size:14px;" type="number" data-i="${i}" data-ci="${ci}" data-f="cm" value="${c.m}" min="0" max="55" step="5">
+          <input class="mini-num" style="width:44px;height:34px;font-size:14px;" type="number" data-i="${i}" data-ci="${ci}" data-f="cm" value="${c.m}" min="0" max="59" step="${step}">
           <button class="del-btn" data-i="${i}" data-ci="${ci}" data-act="mark">${c.correct?'正解':'これを正解に'}</button>
         </span>`;
       });
@@ -659,6 +688,7 @@ function stripTagsForEdit(html){
 }
 
 function bindProblemEvents(){
+  const step=state.settings.step;
   document.querySelectorAll(".prob-text").forEach(el=>{
     el.addEventListener("input",()=>{
       const i=parseInt(el.dataset.i);
@@ -670,7 +700,7 @@ function bindProblemEvents(){
       const i=parseInt(el.dataset.i), f=el.dataset.f;
       let v=parseInt(el.value)||0;
       if(f==="ansH") v=Math.max(0,Math.min(23,v));
-      if(f==="ansM"){ v=Math.max(0,Math.min(55,Math.round(v/5)*5)); }
+      if(f==="ansM"){ v=Math.max(0,Math.min(59,Math.round(v/step)*step)); }
       el.value=v;
       state.problems[i][f]=v;
     });
@@ -680,7 +710,7 @@ function bindProblemEvents(){
       const i=parseInt(el.dataset.i), ci=parseInt(el.dataset.ci), f=el.dataset.f;
       let v=parseInt(el.value)||0;
       if(f==="ch") v=Math.max(0,Math.min(23,v));
-      if(f==="cm") v=Math.max(0,Math.min(55,Math.round(v/5)*5));
+      if(f==="cm") v=Math.max(0,Math.min(59,Math.round(v/step)*step));
       el.value=v;
       state.problems[i].choices[ci][f==="ch"?"h":"m"]=v;
     });
@@ -1417,7 +1447,6 @@ function presentNext(){
 ============================================================ */
 let presentAnimId=null;
 const presentAnim = { playing:false, dir:1, progress:0, total:0, durSec:6, lastTs:null, spec:null, revealed:false };
-const EDGE_EPS = 0.001;
 
 function stopPresentAnim(){
   presentAnim.playing=false; presentAnim.lastTs=null;
